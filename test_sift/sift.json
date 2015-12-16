@@ -1,0 +1,30 @@
+{
+    "dag": {
+        "nodes":[
+            {
+                "implementation": {
+                    "python": "server/node1.py",
+                    "sandbox": ""
+                }
+            },
+            {
+                "implementation": {
+                    "python": "server/node2.py",
+                    "sandbox": ""
+                }
+            },
+            {
+                "implementation": {
+                    "python": "server/node3.py",
+                    "sandbox": ""
+                }
+            },
+            {
+                "implementation": {
+                    "python": "server/node4.py",
+                    "sandbox": ""
+                }
+            }
+        ]
+    }
+}

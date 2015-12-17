@@ -7,12 +7,19 @@ machine:
   services:
     - docker
 
+dependencies:
+  override:
+    - docker info
+    - ./install.sh
+    - docker build -t $CONTAINER_NAME .
+
+test:
+  override:
+    - "docker run -a stdout -a stderr $CONTAINER_NAME --version"
+
 deployment:
   production:
     branch: master
     commands:
-    - docker info
-    - docker login -e $QUAY_EMAIL -u $QUAY_USER -p $QUAY_PASS quay.io
-    - ./install.sh
-    - docker build -t $CONTAINER_NAME .
-    - docker push $CONTAINER_NAME
+      - docker login -e $QUAY_EMAIL -u $QUAY_USER -p $QUAY_PASS quay.io
+      - docker push $CONTAINER_NAME

@@ -41,6 +41,7 @@ def main():
     ipc_root = env_var_or_exit('IPC_ROOT')
     dag = load_dag(sift_root)
     threads = {}
+    sockets = []
     node_indexes = sys.argv[1:]
     if len(node_indexes) == 0:
         print 'no nodes to execute'
@@ -56,20 +57,23 @@ def main():
         s.send_timeout = 2000 # ms
         s.connect(addr)
         print 'connected to ', addr
+        sockets.append(s)
 
+        # Launch request handler.
         t = threading.Thread(target=listen_and_reply, args=(s, m.compute))
         t.daemon = True
         t.start()
         threads[i] = t
 
     try:
-        # TODO: monitor threads, exit main when one of the threads returns.
-        while True: time.sleep(1)
-    except (KeyboardInterrupt, SystemExit):
-        print 'bye'
+        while True:
+            time.sleep(1)
+            for i, thr in threads.items():
+                if not thr.isAlive():
+                    raise Exception('thread of node with index %d is dead' % i)
     finally:
         print 'closing sockets'
-        # TODO: close socks
+        for s in sockets: s.close()
 
 if __name__ == '__main__':
     main()

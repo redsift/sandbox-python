@@ -8,6 +8,14 @@ import time
 
 from nanomsg import Socket, REP
 
+import protocol as p
+
+
+def listen_and_reply(sock, compute_func):
+    while True:
+        req = p.unmarshal(sock.recv())
+        sock.send(p.marshal(compute_func(req)))
+
 def env_var_or_exit(n):
     v = os.environ.get(n)
     if not v:
@@ -26,12 +34,6 @@ def new_module(node_idx, src):
     # need. We just return m instead.
     return m
 
-def listen_and_reply(sock, compute_func):
-    while True:
-        req = sock.recv()
-        sock.send(serialize_rsp(compute_func(req)))
-
-def serialize_rsp(s): return str(s)
 
 def load_dag(sift_root):
      return json.load(open(os.path.join(sift_root, 'sift.json')))

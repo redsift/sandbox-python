@@ -1,1 +1,2 @@
-def compute(req): return 3
+def compute(req):
+    raise Exception('crash')

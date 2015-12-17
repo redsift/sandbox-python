@@ -7,6 +7,7 @@ import bootstrap
 
 
 def main():
+    sift_root = '/run/dagger/ipc'
     node_indexes = sys.argv[1:]
     if len(node_indexes) == 0:
         print 'no nodes to execute'
@@ -15,7 +16,7 @@ def main():
     sockets = {}
     for i in map(int, node_indexes):
         s = nanomsg.Socket(nanomsg.REQ)
-        addr = "ipc:///tmp/%d.sock" % i
+        addr = "ipc:///%s/%d.sock" % (sift_root, i)
         s.bind(addr)
         print 'bound to', addr
         sockets[i] = s

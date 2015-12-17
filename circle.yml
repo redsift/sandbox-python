@@ -1,6 +1,6 @@
 machine:
   environment:
-    CONTAINER_NAME: quay.io/redsift/sandbox-python:2
+    CONTAINER_NAME: quay.io/redsift/sandbox-python:v2
   pre:
     - sudo curl -L -o /usr/bin/docker 'https://s3-external-1.amazonaws.com/circle-downloads/docker-1.9.0-circleci'
     - sudo chmod 0755 /usr/bin/docker

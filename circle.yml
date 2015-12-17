@@ -1,0 +1,18 @@
+machine:
+  environment:
+    CONTAINER_NAME: quay.io/redsift/sandbox-python:2
+  pre:
+    - sudo curl -L -o /usr/bin/docker 'https://s3-external-1.amazonaws.com/circle-downloads/docker-1.9.0-circleci'
+    - sudo chmod 0755 /usr/bin/docker
+  services:
+    - docker
+
+deployment:
+  production:
+    branch: master
+    commands:
+    - docker info
+    - docker login -e $QUAY_EMAIL -u $QUAY_USER -p $QUAY_PASS quay.io
+    - ./install.sh
+    - docker build -t $CONTAINER_NAME .
+    - docker push $CONTAINER_NAME

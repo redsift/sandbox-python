@@ -1,8 +1,5 @@
 FROM python:2
 
-LABEL io.redsift.dagger.init="install.py" io.redsift.dagger.run="bootstrap.py"
-ENV SIFT_ROOT="test_sift" IPC_ROOT="/run/dagger/ipc"
-
 RUN apt-get update && \
     apt-get install -y libnanomsg-dev && \
     apt-get clean && \
@@ -15,4 +12,8 @@ RUN python setup.py install
 COPY . /app
 WORKDIR /app
 
+LABEL io.redsift.dagger.init="install.py" io.redsift.dagger.run="bootstrap.py"
+ENV SIFT_ROOT="/run/dagger/sift" \
+	IPC_ROOT="/run/dagger/ipc" \
+	PYTHONUNBUFFERED=1
 ENTRYPOINT ["/usr/local/bin/python"]

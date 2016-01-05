@@ -2,8 +2,6 @@ import base64
 import json
 
 
-# TODO: exception handling
-
 def b64decode(d):
     for dd in d['data']:
         if 'value' in dd:
@@ -25,10 +23,7 @@ def marshal(d):
 
 def unmarshal(data):
     """Umarshal the raw data read of the socket."""
-    try:
-        d = json.loads(data)
-    except ValueError:
-       raise
+    d = json.loads(data)
 
     for k in ['in', 'with']:
         if k in d: b64decode(d[k])

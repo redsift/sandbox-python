@@ -16,4 +16,8 @@ LABEL io.redsift.dagger.init="install.py" io.redsift.dagger.run="bootstrap.py"
 ENV SIFT_ROOT="/run/dagger/sift" \
 	IPC_ROOT="/run/dagger/ipc" \
 	PYTHONUNBUFFERED=1
+# TODO: This doesn't work if sift root is overridden when running the
+# container.
+ENV PYTHONPATH="$SIFT_ROOT/server/site-packages"
+
 ENTRYPOINT ["/usr/local/bin/python"]

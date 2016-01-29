@@ -25,7 +25,7 @@ def unmarshal(data):
     """Umarshal the raw data read of the socket."""
     d = json.loads(data)
 
-    for k in ['in', 'with']:
+    for k in ['in', 'with', 'lookup']:
         if k in d: b64decode(d[k])
 
     return d

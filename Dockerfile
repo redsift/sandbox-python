@@ -21,3 +21,24 @@ ENV SIFT_ROOT="/run/dagger/sift" \
 ENV PYTHONPATH="$SIFT_ROOT/server/site-packages"
 
 ENTRYPOINT ["/usr/local/bin/python"]
+
+# Libraries for ML example
+RUN apt-get update
+RUN apt-get install -y \
+      g++ \
+      git \
+      libopenblas-dev \
+      python-dev \
+      python-nose \
+      python-numpy \
+      python-pip \
+      python-scipy \
+      gfortran
+
+RUN pip install --upgrade pip
+
+# TODO: write requirements file (or pip freeze)
+RUN pip install -v git+git://github.com/Theano/Theano.git
+RUN pip install keras
+RUN pip install pandas
+RUN pip install scikit-learn

@@ -1,9 +1,31 @@
 FROM python:2
 
-RUN apt-get update && \
-    apt-get install -y libnanomsg-dev && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+RUN apt-get update
+RUN apt-get install -y libnanomsg-dev
+
+#apt-get clean && \
+#rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+# Libraries for ML example
+#RUN apt-get update
+RUN apt-get install -y \
+      g++ \
+      git \
+      libopenblas-dev \
+      python-dev \
+      python-nose \
+      python-numpy \
+      python-pip \
+      python-scipy \
+      gfortran
+
+RUN pip install --upgrade pip
+
+# TODO: write requirements file (or pip freeze)
+RUN pip install -v git+git://github.com/Theano/Theano.git
+RUN pip install keras
+RUN pip install pandas
+RUN pip install scikit-learn
 
 COPY vendor /app/vendor
 WORKDIR /app/vendor/nanomsg-python

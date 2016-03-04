@@ -31,7 +31,7 @@ test:
         ls -A $PWD/test/server/site-packages || true
         RUN=$(docker inspect -f "{{index .ContainerConfig.Labels \"io.redsift.dagger.run\" }}" $PV)
         echo "Calling run = $RUN"
-        docker run -v $PWD/test:/run/dagger/sift -e DRY=true $PV $RUN 0
+        # docker run -v $PWD/test:/run/dagger/sift -e DRY=true $PV $RUN 0
         sudo rm -Rf $PWD/test/server/site-packages || true
       done
   

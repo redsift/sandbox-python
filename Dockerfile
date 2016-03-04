@@ -33,4 +33,4 @@ VOLUME /run/dagger/sift
 
 WORKDIR /run/dagger/sift
 
-ENTRYPOINT ["/usr/bin/python"]
+ENTRYPOINT ["/usr/bin/python3"]

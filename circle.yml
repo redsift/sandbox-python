@@ -53,9 +53,10 @@ deployment:
           echo $MAJOR_VERSION
           echo "Tagging as $CONTAINER_NAME:$VERSION"
           docker tag $PV:latest $CONTAINER_NAME:$VERSION
-          docker push $CONTAINER_NAME
+          docker images
+          docker push $CONTAINER_NAME:$VERSION
           echo "Tagging as $CONTAINER_NAME:$MAJOR_VERSION"
           docker tag -f $PV:latest $CONTAINER_NAME:$MAJOR_VERSION
-          docker push $CONTAINER_NAME 
+          docker push $CONTAINER_NAME:$MAJOR_VERSION
         done
       - ./circle_ci_trigger_build

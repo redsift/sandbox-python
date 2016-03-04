@@ -23,8 +23,8 @@ test:
   override:
     - |
       set -e
-      for PV in $PYTHON_VERSIONS
-      do
+      # for PV in $PYTHON_VERSIONS
+      # do
         # INIT=$(docker inspect -f "{{index .ContainerConfig.Labels \"io.redsift.dagger.init\" }}" $PV)
         # echo "Calling init = $INIT"
         # docker run -v $PWD/test:/run/dagger/sift $PV $INIT 0
@@ -33,7 +33,7 @@ test:
         # echo "Calling run = $RUN"
         # docker run -v $PWD/test:/run/dagger/sift -e DRY=true $PV $RUN 0
         # sudo rm -Rf $PWD/test/server/site-packages || true
-      done
+      # done
   
 deployment:
   production:

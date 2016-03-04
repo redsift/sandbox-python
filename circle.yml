@@ -28,7 +28,7 @@ test:
         INIT=$(docker inspect -f "{{index .ContainerConfig.Labels \"io.redsift.dagger.init\" }}" $PV)
         echo "Calling init = $INIT"
         docker run -v $PWD/test:/run/dagger/sift $PV $INIT 0
-        ls -A $PWD/test/server/site-packages
+        ls -A $PWD/test/server/site-packages || true
         RUN=$(docker inspect -f "{{index .ContainerConfig.Labels \"io.redsift.dagger.run\" }}" $PV)
         echo "Calling run = $RUN"
         docker run -v $PWD/test:/run/dagger/sift -e DRY=true $PV $RUN 0

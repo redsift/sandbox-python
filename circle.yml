@@ -14,10 +14,10 @@ dependencies:
     - ./install.sh
     - |
       set -e
-      for PV in $PYTHON_VERSIONS
-      do
-        docker build --build-arg version=$PV -t $PV .
-      done
+      # Build python2.7
+      docker build -t 2.7 -f Dockerfile .
+      # Build python3
+      docker build -t 3 -f Dockerfile-3 .
       
 test:
   override:

@@ -44,15 +44,15 @@ deployment:
         set -e
         for PV in $PYTHON_VERSIONS
         do
-          PYTHON_VERSION=$(docker run $PV --version)
+          PYTHON_VERSION=$(docker run -a stderr -a stdout $PV --version)
           VERSION_ARRAY=($PYTHON_VERSION)
-          VERSION=${VERSION_ARRAY[1]}
+          VERSION=v${VERSION_ARRAY[1]}
           MAJOR_NUMBER=(${VERSION//./ })
           MAJOR_VERSION=v$MAJOR_NUMBER
           echo "Tagging as $CONTAINER_NAME:$VERSION"
           docker tag $PV:latest $CONTAINER_NAME:$VERSION
           echo "Tagging as $CONTAINER_NAME:$MAJOR_VERSION"
-          docker tag $PV:latest $CONTAINER_NAME:$MAJOR_VERSION
+          docker tag $CONTAINER_NAME:$VERSION $CONTAINER_NAME:$MAJOR_VERSION
           docker push $CONTAINER_NAME 
         done
       - ./circle_ci_trigger_build

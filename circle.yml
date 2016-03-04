@@ -47,8 +47,10 @@ deployment:
           PYTHON_VERSION=$(docker run -t $PV --version)
           VERSION_ARRAY=($PYTHON_VERSION)
           VERSION=v${VERSION_ARRAY[1]}
+          echo $VERSION
           MAJOR_NUMBER=(${VERSION//./ })
           MAJOR_VERSION=v$MAJOR_NUMBER
+          echo $MAJOR_VERSION
           echo "Tagging as $CONTAINER_NAME:$VERSION"
           docker tag $PV:latest $CONTAINER_NAME:$VERSION
           echo "Tagging as $CONTAINER_NAME:$MAJOR_VERSION"

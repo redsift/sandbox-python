@@ -44,7 +44,7 @@ deployment:
         set -e
         for PV in $PYTHON_VERSIONS
         do
-          PYTHON_VERSION=$(docker run -a stderr -a stdout $PV --version)
+          PYTHON_VERSION=$(docker run -t $PV --version)
           VERSION_ARRAY=($PYTHON_VERSION)
           VERSION=v${VERSION_ARRAY[1]}
           MAJOR_NUMBER=(${VERSION//./ })

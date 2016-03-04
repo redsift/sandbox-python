@@ -49,12 +49,13 @@ deployment:
           VERSION=v${VERSION_ARRAY[1]}
           echo $VERSION
           MAJOR_NUMBER=(${VERSION//./ })
-          MAJOR_VERSION=v$MAJOR_NUMBER
+          MAJOR_VERSION=$MAJOR_NUMBER
           echo $MAJOR_VERSION
           echo "Tagging as $CONTAINER_NAME:$VERSION"
           docker tag $PV:latest $CONTAINER_NAME:$VERSION
+          docker push $CONTAINER_NAME
           echo "Tagging as $CONTAINER_NAME:$MAJOR_VERSION"
-          docker tag $CONTAINER_NAME:$VERSION $CONTAINER_NAME:$MAJOR_VERSION
+          docker tag -f $PV:latest $CONTAINER_NAME:$MAJOR_VERSION
           docker push $CONTAINER_NAME 
         done
       - ./circle_ci_trigger_build

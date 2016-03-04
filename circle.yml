@@ -1,6 +1,7 @@
 machine:
   environment:
     CONTAINER_NAME: quay.io/redsift/sandbox-python:v2
+    CIRCLE_REVERSE_DEPENDENCIES: sandbox-scipy
   pre:
     - sudo curl -L -o /usr/bin/docker 'https://s3-external-1.amazonaws.com/circle-downloads/docker-1.9.0-circleci'
     - sudo chmod 0755 /usr/bin/docker
@@ -24,4 +25,5 @@ deployment:
       - docker login -e $QUAY_EMAIL -u $QUAY_USER -p $QUAY_PASS quay.io
       - | 
         set -e
-        docker push $CONTAINER_NAME 
+        docker push $CONTAINER_NAME
+      - ./circle_ci_trigger_build 

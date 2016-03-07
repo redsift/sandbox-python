@@ -1,2 +1,1 @@
-nanomsg==1.0
-wheel==0.24.0
+monotonic==1.0

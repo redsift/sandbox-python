@@ -21,7 +21,7 @@ def b64encode(d):
             raise Exception('unsupported data type')
     return d
 
-def to_encoded_message(d):
+def to_encoded_message(d, diff):
     """Marshal the data d to write it to the socket."""
     if type(d) == dict:
         out = [b64encode(d)]
@@ -32,7 +32,7 @@ def to_encoded_message(d):
     else:
         raise Exception('node implementation has to return dict, list or None')
 
-    return json.dumps(dict(out=out))
+    return json.dumps(dict(out=out, stats=dict(result=diff)))
 
 def from_encoded_message(data):
     """Umarshal the raw data read of the socket."""

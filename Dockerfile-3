@@ -27,6 +27,8 @@ COPY vendor /vendor
 
 RUN cd /vendor/nanomsg-python && python3 setup.py install
 
+RUN pip3 install -r /usr/bin/redsift/requirements.txt
+
 VOLUME /run/dagger/sift
 
 WORKDIR /run/dagger/sift

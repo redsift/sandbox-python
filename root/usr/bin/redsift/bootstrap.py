@@ -7,16 +7,26 @@ import os.path
 import sys
 import threading
 import time
+import math
+
+import monotonic
 
 from nanomsg import Socket, REP
 
 import protocol as p
 
-
 def listen_and_reply(sock, compute_func):
     while True:
         req = p.from_encoded_message(sock.recv())
-        sock.send(p.to_encoded_message(compute_func(req)))
+        start = monotonic()
+        # TODO: try/catch
+        ret = compute_func(req)
+        end = monotonic()
+        t = end - start
+        diff = []
+        diff.append(math.floor(t))
+        diff.append((t - math.floor(t)) * math.pow(10, 9))
+        sock.send(p.to_encoded_message(ret, diff))
 
 def env_var_or_exit(n):
     v = os.environ.get(n)

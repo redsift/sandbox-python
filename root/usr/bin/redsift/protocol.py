@@ -15,7 +15,7 @@ def b64encode(d):
             d['value'] = base64.b64encode(json.dumps(v).encode('utf-8')).decode('utf-8')
         elif type(v) == str:
             d['value'] = base64.b64encode(v.encode('utf-8')).decode('utf-8')
-        elif type(v) == bytearray:
+        elif type(v) == bytearray or type(v) == bytes:
             d['value'] = base64.b64encode(v).decode('utf-8')
         else:
             raise Exception('unsupported data type')
@@ -30,7 +30,7 @@ def to_encoded_message(d):
     elif d == None:
         out = [d]
     else:
-        raise Exception('node implementation has to return dict')
+        raise Exception('node implementation has to return dict, list or None')
 
     return json.dumps(dict(out=out))
 

@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 import imp
 import json
 import os
@@ -5,6 +7,7 @@ import os.path
 import sys
 import threading
 import time
+
 
 from nanomsg import Socket, REP
 
@@ -19,7 +22,7 @@ def listen_and_reply(sock, compute_func):
 def env_var_or_exit(n):
     v = os.environ.get(n)
     if not v:
-        print n + ' not set'
+        print(n + ' not set')
         sys.exit(1)
     return v
 
@@ -28,7 +31,7 @@ def new_module(node_idx, src):
     sys.path.append(os.path.dirname(src))
     m = imp.load_source('node%d' % node_idx, src)
     if not hasattr(m, 'compute'):
-        print '"%s" does not implement compute function' % src
+        print('"%s" does not implement compute function' % src)
         sys.exit(1)
     return m
 
@@ -43,11 +46,11 @@ def main():
     sockets = []
     node_indexes = sys.argv[1:]
     if len(node_indexes) == 0:
-        print 'no nodes to execute'
+        print('no nodes to execute')
         return 1
     for i in map(int, node_indexes):
         src = os.path.join(sift_root, dag['dag']['nodes'][i]['implementation']['python'])
-        print 'loading ' + src
+        print('loading ' + src)
         m = new_module(i, src)
 
         # Create nanomsg socket.
@@ -55,7 +58,7 @@ def main():
         s = Socket(REP)
         s.send_timeout = 2000 # ms
         s.connect(addr)
-        print 'connected to ', addr
+        print('connected to '+ addr)
         sockets.append(s)
 
         # Launch request handler.
@@ -71,7 +74,7 @@ def main():
                 if not thr.isAlive():
                     raise Exception('thread of node with index %d is dead' % i)
     finally:
-        print 'closing sockets'
+        print('closing sockets')
         for s in sockets: s.close()
 
 if __name__ == '__main__':

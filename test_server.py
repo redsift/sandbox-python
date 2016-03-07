@@ -1,5 +1,6 @@
 import sys
 import time
+import json
 
 import nanomsg
 
@@ -7,7 +8,7 @@ import bootstrap
 
 
 def main():
-    sift_root = '/run/dagger/ipc'
+    sift_root = '/tmp'
     node_indexes = sys.argv[1:]
     if len(node_indexes) == 0:
         print 'no nodes to execute'
@@ -23,7 +24,7 @@ def main():
 
     while True:
         for i, s in sockets.items():
-            s.send("hello")
+            s.send(json.dumps(dict(hello=23)))
             print time.time(), s.recv(), 'from', i
             time.sleep(1)
 

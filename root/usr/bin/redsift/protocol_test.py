@@ -1,11 +1,14 @@
 import protocol as p
 
 
-def test_marshal():
+def test_encode():
     d = dict(value='abc')
-    assert p.marshal(d) == '{"out": [{"value": "ImFiYyI="}]}'
+    assert p.to_encoded_message(d) == '{"out": [{"value": "YWJj"}]}'
 
-def test_unmarshal():
-    d = p.unmarshal('{"in":{"data":[{"value": "ImFiYyI="}]}}')
-    assert d == {'in': {'data': [{'value': '"abc"'}]}}
+def test_decode():
+    d = p.from_encoded_message('{"in":{"data":[{"value": "YWJj"}]}}')
+    assert d == {'in': {'data': [{'value': 'abc'}]}}
 
+def test_decode_lookup():
+    d = p.from_encoded_message('{"in":{"data":[{"value": "YWJj"}]}, "lookup": [{"data":[{"value": "YWJj"}]}]}')
+    assert d == {'in': {'data': [{'value': 'abc'}]}, 'lookup': [{'data': [{'value': 'abc'}]}]}

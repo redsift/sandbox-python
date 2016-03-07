@@ -10,22 +10,39 @@ def b64decode(d):
 
 def b64encode(d):
     if 'value' in d:
-        d['value'] = base64.b64encode(json.dumps(d['value']))
+        v = d['value']
+        if type(v) == dict or type(v) == list:
+            d['value'] = base64.b64encode(json.dumps(v).encode('utf-8')).decode('utf-8')
+        elif type(v) == str:
+            d['value'] = base64.b64encode(v.encode('utf-8')).decode('utf-8')
+        elif type(v) == bytearray:
+            d['value'] = base64.b64encode(v).decode('utf-8')
+        else:
+            raise Exception('unsupported data type')
     return d
 
-def marshal(d):
+def to_encoded_message(d):
     """Marshal the data d to write it to the socket."""
     if type(d) == dict:
         out = [b64encode(d)]
-    else:
+    elif type(d) == list:
         out = [b64encode(i) for i in d]
+    elif d == None:
+        out = [d]
+    else:
+        raise Exception('node implementation has to return dict')
+
     return json.dumps(dict(out=out))
 
-def unmarshal(data):
+def from_encoded_message(data):
     """Umarshal the raw data read of the socket."""
-    d = json.loads(data)
+    d = json.loads(data.decode('utf-8'))
 
-    for k in ['in', 'with', 'lookup']:
-        if k in d: b64decode(d[k])
+    for k in ['in', 'with']:
+        if k in d:
+            b64decode(d[k])
+
+    for l in d.get('lookup', []):
+        b64decode(l)
 
     return d

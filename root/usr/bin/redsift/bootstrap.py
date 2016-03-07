@@ -8,7 +8,6 @@ import sys
 import threading
 import time
 
-
 from nanomsg import Socket, REP
 
 import protocol as p
@@ -16,8 +15,8 @@ import protocol as p
 
 def listen_and_reply(sock, compute_func):
     while True:
-        req = p.unmarshal(sock.recv())
-        sock.send(p.marshal(compute_func(req)))
+        req = p.from_encoded_message(sock.recv())
+        sock.send(p.to_encoded_message(compute_func(req)))
 
 def env_var_or_exit(n):
     v = os.environ.get(n)

@@ -11,7 +11,7 @@ ENV PYTHONPATH="$SIFT_ROOT/server/site-packages"
 # Fix for ubuntu to ensure /etc/default/locale is present
 RUN update-locale
 
-RUN export DEBIAN_FRONTEND=noninteractive && \ 
+RUN export DEBIAN_FRONTEND=noninteractive && \
   apt-get update && \
 	apt-get upgrade -y && \
 	apt-get install -y \

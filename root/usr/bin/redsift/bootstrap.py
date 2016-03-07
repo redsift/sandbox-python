@@ -24,16 +24,13 @@ def env_var_or_exit(n):
     return v
 
 def new_module(node_idx, src):
-    n = 'node%d' % node_idx
-    m = imp.new_module(n)
-    exec open(src).read() in m.__dict__
+    # Append dir of the source file to sys.path to allow relative imports.
+    sys.path.append(os.path.dirname(src))
+    m = imp.load_source('node%d' % node_idx, src)
     if not hasattr(m, 'compute'):
         print '"%s" does not implement compute function' % src
         sys.exit(1)
-    # We could register our module under `sys.modules[n]`, but there is no
-    # need. We just return m instead.
     return m
-
 
 def load_dag(sift_root):
      return json.load(open(os.path.join(sift_root, 'sift.json')))

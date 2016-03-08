@@ -9,7 +9,7 @@ import threading
 import time
 import math
 
-import monotonic
+from monotonic import monotonic
 
 from nanomsg import Socket, REP
 

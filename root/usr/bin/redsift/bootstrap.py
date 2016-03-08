@@ -36,8 +36,12 @@ def env_var_or_exit(n):
     return v
 
 def new_module(node_idx, src):
-    # Append dir of the source file to sys.path to allow relative imports.
-    sys.path.append(os.path.dirname(src))
+    # Prepend source file and local site-packages dirs to sys.path to allow
+    # relative imports.
+    for d in  [os.path.dirname(src), os.path.join(os.path.dirname(src), 'site-packages')]:
+        if d not in sys.path:
+            sys.path.insert(0, d)
+
     m = imp.load_source('node%d' % node_idx, src)
     if not hasattr(m, 'compute'):
         print('"%s" does not implement compute function' % src)

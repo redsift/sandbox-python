@@ -5,9 +5,6 @@ ENV PYTHONUNBUFFERED=1
 ENV SIFT_ROOT="/run/dagger/sift" IPC_ROOT="/run/dagger/ipc"
 LABEL io.redsift.dagger.init="/usr/bin/redsift/install.py" io.redsift.dagger.run="/usr/bin/redsift/bootstrap.py"
 
-# TODO: This doesn't work if sift root is overridden when running the container.
-ENV PYTHONPATH="$SIFT_ROOT/server/site-packages"
-
 # Fix for ubuntu to ensure /etc/default/locale is present
 RUN update-locale
 

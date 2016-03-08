@@ -24,6 +24,12 @@
                     "python": "server/node4.py",
                     "sandbox": ""
                 }
+            },
+            {
+                "implementation": {
+                    "python": "server/td/node5.py",
+                    "sandbox": ""
+                }
             }
         ]
     }

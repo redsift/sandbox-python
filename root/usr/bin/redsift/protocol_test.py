@@ -3,7 +3,7 @@ import protocol as p
 
 def test_encode():
     d = dict(value='abc')
-    assert p.to_encoded_message(d) == '{"out": [{"value": "YWJj"}]}'
+    assert p.to_encoded_message(d, [0,0]) == '{"stats": {"result": [0, 0]}, "out": [{"value": "YWJj"}]}'
 
 def test_decode():
     d = p.from_encoded_message('{"in":{"data":[{"value": "YWJj"}]}}')

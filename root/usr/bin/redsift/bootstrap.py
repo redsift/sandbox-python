@@ -13,11 +13,11 @@ from monotonic import monotonic
 
 from nanomsg import Socket, REP
 
-import protocol as p
+import protocol
 
 def listen_and_reply(sock, compute_func):
     while True:
-        req = p.from_encoded_message(sock.recv())
+        req = protocol.from_encoded_message(sock.recv())
         start = monotonic()
         # TODO: try/catch
         ret = compute_func(req)
@@ -25,8 +25,8 @@ def listen_and_reply(sock, compute_func):
         t = end - start
         diff = []
         diff.append(math.floor(t))
-        diff.append((t - math.floor(t)) * math.pow(10, 9))
-        sock.send(p.to_encoded_message(ret, diff))
+        diff.append((t - diff[0]) * math.pow(10, 9))
+        sock.send(protocol.to_encoded_message(ret, diff))
 
 def env_var_or_exit(n):
     v = os.environ.get(n)
@@ -69,7 +69,7 @@ def main():
         # Create nanomsg socket.
         addr = 'ipc://%s/%d.sock'% (ipc_root, i)
         s = Socket(REP)
-        s.send_timeout = 2000 # ms
+        s.recv_max_size = -1
         s.connect(addr)
         print('connected to '+ addr)
         sockets.append(s)

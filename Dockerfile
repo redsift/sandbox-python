@@ -14,7 +14,6 @@ RUN export DEBIAN_FRONTEND=noninteractive && \
 	apt-get install -y \
 	build-essential git pkg-config \
   python2.7-dev python2.7 python-pip \
-  libnanomsg-dev && \
   apt-get clean -y && \
 	rm -rf /root/.pip/cache/* /tmp/pip* && \
   rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*

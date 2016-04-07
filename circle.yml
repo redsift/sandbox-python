@@ -3,6 +3,7 @@ machine:
     CONTAINER_NAME: quay.io/redsift/sandbox-python
     PYTHON_VERSIONS: 2.7 3
     CIRCLE_REVERSE_DEPENDENCIES: sandbox-scipy
+    NANO_MSG: 0.8-beta
   pre:
     - sudo curl -L -o /usr/bin/docker 'https://s3-external-1.amazonaws.com/circle-downloads/docker-1.9.0-circleci'
     - sudo chmod 0755 /usr/bin/docker
@@ -12,6 +13,8 @@ machine:
 dependencies:
   override:
     - docker info
+    - curl -L  https://github.com/nanomsg/nanomsg/archive/$NANO_MSG.tar.gz | tar xz
+    - cd nanomsg-$NANO_MSG; sh autogen.sh && ./configure --prefix=$(readlink -f ./package) && make && make check && sudo make install && cp -r ./package/* ../root/. && mv ../root/include ../root/usr
     - ./install.sh
     - |
       set -e

@@ -12,9 +12,9 @@ machine:
 
 dependencies:
   override:
-    - docker info
-    - curl -L  https://github.com/nanomsg/nanomsg/archive/$NANO_MSG.tar.gz | tar xz
-    - cd nanomsg-$NANO_MSG; sh autogen.sh && ./configure --prefix=$(readlink -f ./package) && make && make check && sudo make install && cp -r ./package/* ../root/. && mv ../root/include ../root/usr
+    - docker info    
+    - curl -L https://github.com/nanomsg/nanomsg/archive/$NANO_MSG.tar.gz | tar xz
+    - cd nanomsg-$NANO_MSG && sh autogen.sh && ./configure --prefix=$(readlink -f ./package) && make && make check && sudo make install && cp -r ./package/* ../root/. && mv ../root/include ../root/usr
     - ./install.sh
     - |
       set -e

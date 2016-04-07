@@ -3,7 +3,6 @@ machine:
     CONTAINER_NAME: quay.io/redsift/sandbox-python
     PYTHON_VERSIONS: 2.7 3
     CIRCLE_REVERSE_DEPENDENCIES: sandbox-scipy
-    NANO_MSG: 0.8-beta
   services:
     - docker
 

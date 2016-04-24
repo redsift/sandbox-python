@@ -8,7 +8,7 @@ LABEL io.redsift.dagger.init="/usr/bin/redsift/install.py" io.redsift.dagger.run
 RUN export DEBIAN_FRONTEND=noninteractive && \ 
   apt-get update && \
 	apt-get install -y \
-	build-essential git pkg-config \
+	build-essential git \
   python2.7-dev python2.7 python-pip && \
   apt-get clean -y && \
 	rm -rf /root/.pip/cache/* /tmp/pip* && \

@@ -4,8 +4,9 @@ MAINTAINER Deepak Prabhakara email: deepak@redsift.io version: 1.1.101
 ENV PYTHONUNBUFFERED=1
 
 LABEL io.redsift.dagger.init="/usr/bin/redsift/install.py" io.redsift.dagger.run="/usr/bin/redsift/bootstrap.py"
+LABEL io.redsift.sandbox.install="/usr/bin/redsift/install.py" io.redsift.sandbox.run="/usr/bin/redsift/bootstrap.py"
 
-RUN export DEBIAN_FRONTEND=noninteractive && \ 
+RUN export DEBIAN_FRONTEND=noninteractive && \
   apt-get update && \
 	apt-get install -y \
 	build-essential git \

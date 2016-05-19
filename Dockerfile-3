@@ -7,11 +7,12 @@ ENV PYTHONUNBUFFERED=1
 
 ENV SIFT_ROOT="/run/dagger/sift" IPC_ROOT="/run/dagger/ipc" SIFT_JSON="sift.json"
 LABEL io.redsift.dagger.init="/usr/bin/redsift/install.py" io.redsift.dagger.run="/usr/bin/redsift/bootstrap.py"
+LABEL io.redsift.sandbox.install="/usr/bin/redsift/install.py" io.redsift.sandbox.run="/usr/bin/redsift/bootstrap.py"
 
 # Fix for ubuntu to ensure /etc/default/locale is present
 RUN update-locale
 
-RUN export DEBIAN_FRONTEND=noninteractive && \ 
+RUN export DEBIAN_FRONTEND=noninteractive && \
   apt-get update && \
 	apt-get install -y \
   curl autoconf libtool make && \

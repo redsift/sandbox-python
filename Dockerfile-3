@@ -5,8 +5,8 @@ ENV PYTHONUNBUFFERED=1
 
 LABEL io.redsift.sandbox.install="/usr/bin/redsift/install.py" io.redsift.sandbox.run="/usr/bin/redsift/run.py"
 
-ARG v=2.7
-ARG t=
+ARG v=3
+ARG t=3
 
 ENV version=${v}
 ENV tag=${t}
@@ -27,4 +27,4 @@ RUN cd /vendor/nanomsg-python && python$tag setup.py install
 
 RUN pip$tag install -r /usr/bin/redsift/requirements.txt
 
-ENTRYPOINT ["/usr/bin/python"]
+ENTRYPOINT ["/usr/bin/python3"]

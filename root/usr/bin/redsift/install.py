@@ -13,9 +13,13 @@ import os
 import os.path
 import pip
 
+import init
 
-sr = os.environ.get('SIFT_ROOT', '')
-sift = json.load(open(os.path.join(sr, 'sift.json')))
+sr = init.env_var_or_exit('SIFT_ROOT')
+sj = init.env_var_or_exit('SIFT_JSON')
+ir = init.env_var_or_exit('IPC_ROOT')
+
+sift = json.load(open(os.path.join(sr, sj)))
 for n in sift['dag']['nodes']:
     if 'implementation' in n and 'python' in n['implementation']:
         d = os.path.dirname(n['implementation']['python'])

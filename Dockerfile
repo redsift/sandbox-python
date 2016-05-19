@@ -12,7 +12,7 @@ RUN export DEBIAN_FRONTEND=noninteractive && \
   apt-get update && \
 	apt-get install -y \
 	build-essential git \
-  python$version-dev python$version python$version-pip && \
+  python$version-dev python$version python$tag-pip && \
   apt-get clean -y && \
 	rm -rf /root/.pip/cache/* /tmp/pip* && \
   rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*

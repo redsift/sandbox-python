@@ -14,6 +14,7 @@ from monotonic import monotonic
 from nanomsg import Socket, REP
 
 import protocol
+import init
 
 def listen_and_reply(sock, compute_func):
     while True:
@@ -27,13 +28,6 @@ def listen_and_reply(sock, compute_func):
         diff.append(math.floor(t))
         diff.append((t - diff[0]) * math.pow(10, 9))
         sock.send(protocol.to_encoded_message(ret, diff))
-
-def env_var_or_exit(n):
-    v = os.environ.get(n)
-    if not v:
-        print(n + ' not set')
-        sys.exit(1)
-    return v
 
 def new_module(node_idx, src):
     # Prepend source file and local site-packages dirs to sys.path to allow
@@ -49,11 +43,12 @@ def new_module(node_idx, src):
     return m
 
 def load_dag(sift_root):
-     return json.load(open(os.path.join(sift_root, 'sift.json')))
+    sift_json = init.env_var_or_exit('SIFT_JSON')
+    return json.load(open(os.path.join(sift_root, sift_json)))
 
 def main():
-    sift_root = env_var_or_exit('SIFT_ROOT')
-    ipc_root = env_var_or_exit('IPC_ROOT')
+    sift_root = init.env_var_or_exit('SIFT_ROOT')
+    ipc_root = init.env_var_or_exit('IPC_ROOT')
     dag = load_dag(sift_root)
     threads = {}
     sockets = []
@@ -61,6 +56,11 @@ def main():
     if len(node_indexes) == 0:
         print('no nodes to execute')
         return 1
+
+    dry = os.environ.get('DRY', 'false')
+    if dry == 'false':
+        return 0
+
     for i in map(int, node_indexes):
         src = os.path.join(sift_root, dag['dag']['nodes'][i]['implementation']['python'])
         print('loading ' + src)

@@ -5,8 +5,11 @@ ENV PYTHONUNBUFFERED=1
 
 LABEL io.redsift.sandbox.install="/usr/bin/redsift/install.py" io.redsift.sandbox.run="/usr/bin/redsift/run.py"
 
-ENV version ${version:-2.7}
-ENV tag ${tag:-}
+ARG v=2.7
+ARG t=
+
+ENV version=${v}
+ENV tag=${t}
 
 RUN export DEBIAN_FRONTEND=noninteractive && \
   apt-get update && \

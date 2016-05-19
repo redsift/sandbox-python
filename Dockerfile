@@ -3,14 +3,16 @@ MAINTAINER Deepak Prabhakara email: deepak@redsift.io version: 1.1.101
 
 ENV PYTHONUNBUFFERED=1
 
-LABEL io.redsift.dagger.init="/usr/bin/redsift/install.py" io.redsift.dagger.run="/usr/bin/redsift/bootstrap.py"
-LABEL io.redsift.sandbox.install="/usr/bin/redsift/install.py" io.redsift.sandbox.run="/usr/bin/redsift/bootstrap.py"
+LABEL io.redsift.sandbox.install="/usr/bin/redsift/install.py" io.redsift.sandbox.run="/usr/bin/redsift/run.py"
+
+ENV version ${version:-2.7}
+ENV tag ${tag:-}
 
 RUN export DEBIAN_FRONTEND=noninteractive && \
   apt-get update && \
 	apt-get install -y \
 	build-essential git \
-  python2.7-dev python2.7 python-pip && \
+  python$version-dev python$version python$version-pip && \
   apt-get clean -y && \
 	rm -rf /root/.pip/cache/* /tmp/pip* && \
   rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
@@ -18,8 +20,8 @@ RUN export DEBIAN_FRONTEND=noninteractive && \
 COPY root /
 COPY vendor /vendor
 
-RUN cd /vendor/nanomsg-python && python setup.py install
+RUN cd /vendor/nanomsg-python && python$tag setup.py install
 
-RUN pip install -r /usr/bin/redsift/requirements.txt
+RUN pip$tag install -r /usr/bin/redsift/requirements.txt
 
-ENTRYPOINT ["/usr/bin/python"]
+ENTRYPOINT exec /usr/bin/python$tag

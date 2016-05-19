@@ -6,11 +6,11 @@ import json
 
 import nanomsg
 
-import bootstrap
+import run
 
 
 def main():
-    sift_root = '/run/dagger/ipc'
+    sift_root = '/tmp'
     node_indexes = sys.argv[1:]
     if len(node_indexes) == 0:
         print('no nodes to execute')

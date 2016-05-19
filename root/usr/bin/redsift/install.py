@@ -4,7 +4,7 @@
    looking for a requirements.txt file in the dir of the implementation,
    when a requirements file is found, we are installing the listed
    libraries into a site-packages directory next to the source file.
-   This site-packages dir is perpended to the Python path by bootstrap.py
+   This site-packages dir is perpended to the Python path by run.py
    when loading the implementation.
 """
 

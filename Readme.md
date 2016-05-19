@@ -1,7 +1,7 @@
 ## Client
 
 ```
-SIFT_ROOT=./test_sift IPC_ROOT="/tmp" python bootstrap.py 0
+SIFT_ROOT=./test_sift IPC_ROOT="/tmp" python run.py 0
 ```
 
 ## Server

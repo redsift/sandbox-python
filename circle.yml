@@ -16,25 +16,25 @@ dependencies:
     - |
       set -e
       # Build python2.7
-      docker build -t 2.7 -f Dockerfile .
+      docker build --build-arg version=2.7 --build-arg tag= -t 2.7 -f Dockerfile .
       # Build python3
-      docker build -t 3 -f Dockerfile-3 .
+      docker build --build-arg version=3 --build-arg tag=3 -t 3 -f Dockerfile .
 
 test:
   override:
     - |
       set -e
-      # for PV in $PYTHON_VERSIONS
-      # do
-        # INIT=$(docker inspect -f "{{index .ContainerConfig.Labels \"io.redsift.sandbox.install\" }}" $PV)
-        # echo "Calling init = $INIT"
-        # docker run -v $PWD/test:/run/dagger/sift $PV $INIT 0
-        # ls -A $PWD/test/server/site-packages || true
-        # RUN=$(docker inspect -f "{{index .ContainerConfig.Labels \"io.redsift.sandbox.run\" }}" $PV)
-        # echo "Calling run = $RUN"
-        # docker run -v $PWD/test:/run/dagger/sift -e DRY=true $PV $RUN 0
-        # sudo rm -Rf $PWD/test/server/site-packages || true
-      # done
+      for PV in $PYTHON_VERSIONS
+      do
+        INIT=$(docker inspect -f "{{index .ContainerConfig.Labels \"io.redsift.sandbox.install\" }}" $PV)
+        echo "Calling init = $INIT"
+        docker run -v $PWD/test:/run/sandbox/sift $PV $INIT 0
+        ls -A $PWD/test/server/site-packages || true
+        RUN=$(docker inspect -f "{{index .ContainerConfig.Labels \"io.redsift.sandbox.run\" }}" $PV)
+        echo "Calling run = $RUN"
+        docker run -v $PWD/test:/run/sandbox/sift -e DRY=true $PV $RUN 0
+        sudo rm -Rf $PWD/test/server/site-packages || true
+      done
 
 deployment:
   production:

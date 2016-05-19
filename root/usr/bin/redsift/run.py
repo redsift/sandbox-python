@@ -58,7 +58,7 @@ def main():
         return 1
 
     dry = os.environ.get('DRY', 'false')
-    if dry == 'false':
+    if dry == 'true':
         return 0
 
     for i in map(int, node_indexes):

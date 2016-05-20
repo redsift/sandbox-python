@@ -5,7 +5,8 @@ ENV PYTHONUNBUFFERED=1
 
 LABEL io.redsift.sandbox.install="/usr/bin/redsift/install.py" io.redsift.sandbox.run="/usr/bin/redsift/run.py"
 
-ARG v=2.7 t=
+ARG v=2.7
+ARG t=
 
 ENV version=${v} tag=${t}
 ENV PYTHONPATH=$PYTHONPATH:$HOME/lib/python PATH=$PATH:$HOME/lib/python

@@ -23,7 +23,7 @@ RUN export DEBIAN_FRONTEND=noninteractive && \
 COPY root /
 COPY vendor /vendor
 
-RUN cd /vendor/nanomsg-python && python$tag setup.py install --user sandbox
+RUN cd /vendor/nanomsg-python && python$tag setup.py install --home=$HOME
 
 RUN pip$tag install --user sandbox -r /usr/bin/redsift/requirements.txt
 

@@ -32,7 +32,7 @@ test:
         INIT=$(docker inspect -f "{{index .Config.Labels \"io.redsift.sandbox.install\" }}" $PV)
         echo "Calling init = $INIT"
         docker run -u 7438 -v $PWD/test:/run/sandbox/sift $PV $INIT 0
-        ls -A $PWD/test/server/site-packages || true
+        ls -A $PWD/test/server/td/site-packages || true
         RUN=$(docker inspect -f "{{index .Config.Labels \"io.redsift.sandbox.run\" }}" $PV)
         echo "Calling run = $RUN"
         docker run -u 7438 -v $PWD/test:/run/sandbox/sift -e DRY=true $PV $RUN 0

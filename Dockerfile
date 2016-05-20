@@ -16,6 +16,7 @@ RUN export DEBIAN_FRONTEND=noninteractive && \
 	apt-get install -y \
 	build-essential git \
   python$version-dev python$version python$tag-pip && \
+  chown -R root:root $HOME && \
   cd /tmp && curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && python get-pip.py && \
   apt-get clean -y && \
 	rm -rf /root/.pip/cache/* /tmp/pip* && \
@@ -24,7 +25,7 @@ RUN export DEBIAN_FRONTEND=noninteractive && \
 COPY root /
 COPY vendor /vendor
 
-RUN chown -R root:root $HOME && mkdir -p $HOME/lib/python && \
+RUN mkdir -p $HOME/lib/python && \
   cd /vendor/nanomsg-python && python$tag setup.py install --user --prefix=
 
 RUN pip$tag install --user -r /usr/bin/redsift/requirements.txt

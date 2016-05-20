@@ -28,11 +28,11 @@ test:
       do
         INIT=$(docker inspect -f "{{index .Config.Labels \"io.redsift.sandbox.install\" }}" $PV)
         echo "Calling init = $INIT"
-        docker run -v $PWD/test:/run/sandbox/sift $PV $INIT 0
+        docker run -u 7438 -v $PWD/test:/run/sandbox/sift $PV $INIT 0
         ls -A $PWD/test/server/site-packages || true
         RUN=$(docker inspect -f "{{index .Config.Labels \"io.redsift.sandbox.run\" }}" $PV)
         echo "Calling run = $RUN"
-        docker run -v $PWD/test:/run/sandbox/sift -e DRY=true $PV $RUN 0
+        docker run -u 7438 -v $PWD/test:/run/sandbox/sift -e DRY=true $PV $RUN 0
         sudo rm -Rf $PWD/test/server/td/site-packages || true
       done
 
@@ -45,7 +45,7 @@ deployment:
         set -e
         for PV in $PYTHON_VERSIONS
         do
-          PYTHON_VERSION=$(docker run -t $PV --version | tr -d '\r' | tr -d '+')
+          PYTHON_VERSION=$(docker run -u 7438 -t $PV --version | tr -d '\r' | tr -d '+')
           VERSION_ARRAY=($PYTHON_VERSION)
           VERSION=v${VERSION_ARRAY[1]}
           MAJOR_NUMBER=(${VERSION//./ })

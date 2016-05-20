@@ -5,17 +5,17 @@ ENV PYTHONUNBUFFERED=1
 
 LABEL io.redsift.sandbox.install="/usr/bin/redsift/install.py" io.redsift.sandbox.run="/usr/bin/redsift/run.py"
 
-ARG v=2.7
-ARG t=
+ARG v=2.7 t=
 
-ENV version=${v}
-ENV tag=${t}
+ENV version=${v} tag=${t}
+ENV PYTHONPATH=$PYTHONPATH:$HOME/lib/python PATH=$PATH:$HOME/lib/python
 
 RUN export DEBIAN_FRONTEND=noninteractive && \
   apt-get update && \
 	apt-get install -y \
 	build-essential git \
   python$version-dev python$version python$tag-pip && \
+  cd /tmp && curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && python get-pip.py && \
   apt-get clean -y && \
 	rm -rf /root/.pip/cache/* /tmp/pip* && \
   rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
@@ -23,9 +23,10 @@ RUN export DEBIAN_FRONTEND=noninteractive && \
 COPY root /
 COPY vendor /vendor
 
-RUN cd /vendor/nanomsg-python && python$tag setup.py install --home=$HOME
+RUN chown -R root:root $HOME && mkdir -p $HOME/lib/python && \
+  cd /vendor/nanomsg-python && python$tag setup.py install --user --prefix=
 
-RUN pip$tag install --user sandbox -r /usr/bin/redsift/requirements.txt
+RUN pip$tag install --user -r /usr/bin/redsift/requirements.txt
 
 RUN chown -R sandbox:sandbox $HOME
 

@@ -5,11 +5,10 @@ ENV PYTHONUNBUFFERED=1
 
 LABEL io.redsift.sandbox.install="/usr/bin/redsift/install.py" io.redsift.sandbox.run="/usr/bin/redsift/run.py"
 
-ARG v=3
-ARG t=3
+ARG v=3 t=3
 
-ENV version=${v}
-ENV tag=${t}
+ENV version=${v} tag=${t}
+ENV PYTHONPATH=$PYTHONPATH:$HOME/lib/python PATH=$PATH:$HOME/lib/python
 
 RUN export DEBIAN_FRONTEND=noninteractive && \
   apt-get update && \
@@ -23,8 +22,11 @@ RUN export DEBIAN_FRONTEND=noninteractive && \
 COPY root /
 COPY vendor /vendor
 
-RUN cd /vendor/nanomsg-python && python$tag setup.py install
+RUN chown -R root:root $HOME && mkdir -p $HOME/lib/python && \
+  cd /vendor/nanomsg-python && python$tag setup.py install --user --prefix=
 
-RUN pip$tag install -r /usr/bin/redsift/requirements.txt
+RUN pip$tag install --user -r /usr/bin/redsift/requirements.txt
+
+RUN chown -R sandbox:sandbox $HOME
 
 ENTRYPOINT ["/usr/bin/python3"]

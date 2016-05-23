@@ -30,6 +30,7 @@ test:
       sudo chown -R sandbox:sandbox ${PWD}
       for PV in $PYTHON_VERSIONS
       do
+        echo "Testing Python v$PV sandbox"
         INIT=$(docker inspect -f "{{index .Config.Labels \"io.redsift.sandbox.install\" }}" $PV)
         echo "Calling init = $INIT"
         docker run -u 7438 -v $PWD/test:/run/sandbox/sift $PV $INIT 0

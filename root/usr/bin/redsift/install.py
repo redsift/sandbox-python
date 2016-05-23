@@ -7,11 +7,13 @@
    This site-packages dir is perpended to the Python path by run.py
    when loading the implementation.
 """
+from __future__ import print_function
 
 import json
 import os
 import os.path
 import pip
+import sys
 
 import init
 
@@ -26,4 +28,7 @@ for n in sift['dag']['nodes']:
         requirements_file = os.path.join(sr, d, 'requirements.txt')
         if os.path.exists(requirements_file):
             td = os.path.join(sr, d, 'site-packages')
-            pip.main(['install', '--target='+td, '-r', requirements_file])
+            ret = pip.main(['install', '--target='+td, '-r', requirements_file])
+            if ret != 0:
+                print('pip install returned code: %s' % ret)
+                sys.exit(ret)

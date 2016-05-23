@@ -5,6 +5,9 @@ ENV PYTHONUNBUFFERED=1
 
 LABEL io.redsift.sandbox.install="/usr/bin/redsift/install.py" io.redsift.sandbox.run="/usr/bin/redsift/run.py"
 
+COPY root /
+COPY vendor /vendor
+
 ARG v=2.7
 ARG t=
 
@@ -17,13 +20,10 @@ RUN export DEBIAN_FRONTEND=noninteractive && \
 	build-essential git \
   python$version-dev python$version python$tag-pip && \
   chown -R root:root $HOME && \
-  cd /tmp && curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && python get-pip.py && \
+  RUN pip$tag install --upgrade pip$tag
   apt-get clean -y && \
 	rm -rf /root/.pip/cache/* /tmp/pip* && \
   rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
-COPY root /
-COPY vendor /vendor
 
 RUN mkdir -p $HOME/lib/python && \
   cd /vendor/nanomsg-python && python$tag setup.py install --user --prefix=

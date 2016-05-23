@@ -20,7 +20,7 @@ RUN export DEBIAN_FRONTEND=noninteractive && \
 	build-essential git \
   python$version-dev python$version python$tag-pip && \
   chown -R root:root $HOME && \
-  RUN pip$tag install --upgrade pip$tag
+  pip$tag install --upgrade pip$tag
   apt-get clean -y && \
 	rm -rf /root/.pip/cache/* /tmp/pip* && \
   rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*

@@ -19,7 +19,7 @@ dependencies:
       docker build --build-arg v=2.7 --build-arg t="" -t 2.7 -f Dockerfile .
       # Build python3
       docker build --build-arg v=3 --build-arg t=3 -t python3 -f Dockerfile .
-      docker build -f Dockerfile-3 .
+      docker build -t 3 -f Dockerfile-3 .
 
 test:
   override:

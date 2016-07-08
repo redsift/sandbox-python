@@ -37,7 +37,7 @@ test:
         ls -A $PWD/test/server/td/site-packages || true
         RUN=$(docker inspect -f "{{index .Config.Labels \"io.redsift.sandbox.run\" }}" $PV)
         echo "Calling run = $RUN"
-        docker run -u 7438:7438 -v $PWD/test:/run/sandbox/sift -e DRY=true $PV $RUN 0
+        docker run -u 7438:7438 -v $PWD/test:/run/sandbox/sift:ro -e DRY=true $PV $RUN 0
         sudo rm -Rf $PWD/test/server/td/site-packages || true
       done
 

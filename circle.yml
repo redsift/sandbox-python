@@ -31,7 +31,7 @@ test:
       for PV in $PYTHON_VERSIONS
       do
         echo "Testing Python v$PV sandbox"
-        docker run -ti $PV -c "print(u'bats\u00E0')"
+        docker run $PV -c "print(u'bats\u00E0')"
         INIT=$(docker inspect -f "{{index .Config.Labels \"io.redsift.sandbox.install\" }}" $PV)
         echo "Calling init = $INIT"
         docker run -u 7438:7438 -v $PWD/test:/run/sandbox/sift $PV $INIT 0

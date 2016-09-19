@@ -1,7 +1,7 @@
 FROM quay.io/redsift/sandbox:latest
-MAINTAINER Deepak Prabhakara email: deepak@redsift.io version: 1.1.101
+MAINTAINER Deepak Prabhakara email: deepak@redsift.io version: 1.1.102
 
-ENV PYTHONUNBUFFERED=1
+ENV PYTHONUNBUFFERED=1 PYTHONIOENCODING=UTF-8
 
 LABEL io.redsift.sandbox.install="/usr/bin/redsift/install.py" io.redsift.sandbox.run="/usr/bin/redsift/run.py"
 

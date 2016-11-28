@@ -20,8 +20,12 @@ def listen_and_reply(sock, compute_func):
     while True:
         req = protocol.from_encoded_message(sock.recv())
         start = monotonic()
-        # TODO: try/catch
-        ret = compute_func(req)
+        try:
+            ret = compute_func(req)
+        except:
+            print "Unexpected error:", sys.exc_info()[0]
+            #sock.send(protocol.to_encoded_message(ret, diff))
+            return
         end = monotonic()
         t = end - start
         diff = []

@@ -5,7 +5,7 @@ def test_encode():
     d = dict(value='abc')
     d1 = dict(value='abc')
     print(p.to_encoded_message(d1, [0,0]))
-    assert p.to_encoded_message(d, [0,0]) == '{"stats": {"result": [0, 0]}, "out": [{"value": "YWJj"}]}'
+    assert p.to_encoded_message(d, [0,0]) == b'{"stats": {"result": [0, 0]}, "out": [{"value": "YWJj"}]}'
 
 def test_decode():
     d = p.from_encoded_message('{"in":{"data":[{"value": "YWJj"}]}}')

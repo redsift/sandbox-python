@@ -3,8 +3,14 @@ import json
 
 
 def b64decode(d):
+    if d['data'] is None:
+        return d
+
     for dd in d['data']:
         if 'value' in dd:
+            if dd['value'] is None:
+                return d
+
             dd['value'] = base64.b64decode(dd['value'])
     return d
 

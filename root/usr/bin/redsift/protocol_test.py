@@ -1,37 +1,29 @@
 import protocol as p
-
+import json
 
 def test_encode():
     d = dict(value='abc')
-    d1 = dict(value='abc')
-    print(p.to_encoded_message(d1, [0,0]))
-    assert p.to_encoded_message(d, [0,0]) == b'{"stats": {"result": [0, 0]}, "out": [{"value": "YWJj"}]}'
+    assert json.loads(p.to_encoded_message(d, [0,0])) == json.loads('{"stats": {"result": [0, 0]}, "out": [{"value": "YWJj"}]}')
 
 def test_decode():
-    d = p.from_encoded_message('{"in":{"data":[{"value": "YWJj"}]}}')
-    print(d)
-    print({'in': {'data': [{'value': 'abc'}]}})
-    assert d == {'in': {'data': [{'value': 'abc'}]}}
+    d = p.from_encoded_message(b'{"in":{"data":[{"value": "YWJj"}]}}')
+    assert d == {'in': {'data': [{'value': b'abc'}]}}
 
 def test_decode_lookup():
     d = p.from_encoded_message(b'{"in":{"data":[{"value": "YWJj"}]}, "lookup": [{"data":[{"value": "YWJj"}]}]}')
-    print(d)
-    assert d == {'in': {'data': [{'value': 'abc'}]}, 'lookup': [{'data': [{'value': 'abc'}]}]}
+    assert d == {'in': {'data': [{'value': b'abc'}]}, 'lookup': [{'data': [{'value': b'abc'}]}]}
 
 def test_decode_lookup1():
     d = p.from_encoded_message(b'{"in":{"data":[{"value": "YWJj"}]}, "lookup": [{"data":[]}]}')
-    print(d)
-    assert d == {'in': {'data': [{'value': 'abc'}]}, 'lookup': [{'data': []}]}
+    assert d == {'in': {'data': [{'value': b'abc'}]}, 'lookup': [{'data': []}]}
 
 def test_decode_lookup2():
     d = p.from_encoded_message(b'{"in":{"data":[{"value": "YWJj"}]}, "lookup": [{"data":[{"value": null}]}]}')
-    print(d)
-    assert d == {'in': {'data': [{'value': 'abc'}]}, 'lookup': [{'data': [{'value': None }]}]}
+    assert d == {'in': {'data': [{'value': b'abc'}]}, 'lookup': [{'data': [{'value': None }]}]}
 
 def test_decode_lookup3():
     d = p.from_encoded_message(b'{"in":{"data":[{"value": "YWJj"}]}, "lookup": [{"data":null}]}')
-    print(d)
-    assert d == {'in': {'data': [{'value': 'abc'}]}, 'lookup': [{'data': None}]}
+    assert d == {'in': {'data': [{'value': b'abc'}]}, 'lookup': [{'data': None}]}
 
 test_encode()
 test_decode()

@@ -8,23 +8,29 @@ def test_encode():
     assert p.to_encoded_message(d, [0,0]) == '{"stats": {"result": [0, 0]}, "out": [{"value": "YWJj"}]}'
 
 def test_decode():
-    d = p.from_encoded_message(b'{"in":{"data":[{"value": "YWJj"}]}}')
+    d = p.from_encoded_message('{"in":{"data":[{"value": "YWJj"}]}}')
+    print(d)
+    print({'in': {'data': [{'value': 'abc'}]}})
     assert d == {'in': {'data': [{'value': 'abc'}]}}
 
 def test_decode_lookup():
     d = p.from_encoded_message(b'{"in":{"data":[{"value": "YWJj"}]}, "lookup": [{"data":[{"value": "YWJj"}]}]}')
+    print(d)
     assert d == {'in': {'data': [{'value': 'abc'}]}, 'lookup': [{'data': [{'value': 'abc'}]}]}
 
 def test_decode_lookup1():
     d = p.from_encoded_message(b'{"in":{"data":[{"value": "YWJj"}]}, "lookup": [{"data":[]}]}')
+    print(d)
     assert d == {'in': {'data': [{'value': 'abc'}]}, 'lookup': [{'data': []}]}
 
 def test_decode_lookup2():
     d = p.from_encoded_message(b'{"in":{"data":[{"value": "YWJj"}]}, "lookup": [{"data":[{"value": null}]}]}')
+    print(d)
     assert d == {'in': {'data': [{'value': 'abc'}]}, 'lookup': [{'data': [{'value': None }]}]}
 
 def test_decode_lookup3():
     d = p.from_encoded_message(b'{"in":{"data":[{"value": "YWJj"}]}, "lookup": [{"data":null}]}')
+    print(d)
     assert d == {'in': {'data': [{'value': 'abc'}]}, 'lookup': [{'data': None}]}
 
 test_encode()

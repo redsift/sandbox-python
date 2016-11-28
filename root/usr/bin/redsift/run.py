@@ -23,7 +23,7 @@ def listen_and_reply(sock, compute_func):
         try:
             ret = compute_func(req)
         except:
-            print "Unexpected error:", sys.exc_info()[0]
+            print("Unexpected error:", sys.exc_info()[0])
             #sock.send(protocol.to_encoded_message(ret, diff))
             return
         end = monotonic()

@@ -22,16 +22,18 @@ def listen_and_reply(sock, compute_func):
         start = monotonic()
         try:
             ret = compute_func(req)
+            end = monotonic()
+            t = end - start
+            diff = []
+            diff.append(math.floor(t))
+            diff.append((t - diff[0]) * math.pow(10, 9))
+            sock.send(protocol.to_encoded_message(ret, diff))
         except:
-            print("Unexpected error:", sys.exc_info()[0])
-            #sock.send(protocol.to_encoded_message(ret, diff))
+            exc = traceback.format_exc()
+            print(exc)
+            err = dict(message=sys.exc_info()[0].__name__, stack=exc)
+            sock.send(json.dumps(dict(err=err)))
             return
-        end = monotonic()
-        t = end - start
-        diff = []
-        diff.append(math.floor(t))
-        diff.append((t - diff[0]) * math.pow(10, 9))
-        sock.send(protocol.to_encoded_message(ret, diff))
 
 def new_module(node_idx, src):
     # Prepend source file and local site-packages dirs to sys.path to allow

@@ -17,13 +17,15 @@ def b64decode(d):
 def b64encode(d):
     if 'value' in d:
         v = d['value']
-        if type(v) == dict or type(v) == list:
+        typ = type(v)
+        if typ == dict or typ == list:
             d['value'] = base64.b64encode(json.dumps(v).encode('utf-8')).decode('utf-8')
-        elif type(v) == str:
+        elif typ == str:
             d['value'] = base64.b64encode(v.encode('utf-8')).decode('utf-8')
-        elif type(v) == bytearray or type(v) == bytes:
+        elif typ == bytearray or typ == bytes:
             d['value'] = base64.b64encode(v).decode('utf-8')
         else:
+            print(typ)
             raise Exception('unsupported data type')
     return d
 

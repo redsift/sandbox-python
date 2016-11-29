@@ -33,7 +33,7 @@ def listen_and_reply(sock, compute_func):
             exc = traceback.format_exc()
             print(exc)
             err = dict(message=sys.exc_info()[0].__name__, stack=exc)
-            sock.send(json.dumps(dict(err=err)))
+            sock.send(json.dumps(dict(error=err)))
             return
 
 def new_module(node_idx, src):

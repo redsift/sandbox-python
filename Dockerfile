@@ -21,7 +21,7 @@ RUN export DEBIAN_FRONTEND=noninteractive && \
   python$version-dev python$version python$tag-pip && \
   chown -R root:root $HOME && \
   pip$tag install --upgrade pip || true && \
-  apt-get clean -y && \
+  apt-get purge -y && \
 	rm -rf /root/.pip/cache/* /tmp/pip* && \
   rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 

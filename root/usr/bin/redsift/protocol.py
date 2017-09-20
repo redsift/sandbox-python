@@ -53,4 +53,7 @@ def from_encoded_message(data):
     for l in d.get('lookup', []):
         b64decode(l)
 
+    for g in d.get('get', []):
+        b64decode(g)
+
     return d

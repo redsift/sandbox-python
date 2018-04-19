@@ -12,7 +12,12 @@ from __future__ import print_function
 import json
 import os
 import os.path
-import pip
+
+try:
+    from pip import main as pipmain
+except:
+    from pip._internal import main as pipmain
+
 import sys
 
 import init
@@ -28,7 +33,7 @@ for n in sift['dag']['nodes']:
         requirements_file = os.path.join(sr, d, 'requirements.txt')
         if os.path.exists(requirements_file):
             td = os.path.join(sr, d, 'site-packages')
-            ret = pip.main(['install', '--target='+td, '-r', requirements_file])
+            ret = pipmain(['install', '--target='+td, '-r', requirements_file])
             if ret != 0:
                 print('pip install returned code: %s' % ret)
                 sys.exit(ret)

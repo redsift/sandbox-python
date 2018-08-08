@@ -34,7 +34,6 @@ def listen_and_reply(sock, compute_func):
             print(exc)
             err = dict(message=sys.exc_info()[0].__name__, stack=exc)
             sock.send(json.dumps(dict(error=err)))
-            return
 
 def new_module(node_idx, src):
     # Prepend source file and local site-packages dirs to sys.path to allow

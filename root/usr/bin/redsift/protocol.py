@@ -1,5 +1,6 @@
 import base64
 import json
+import sys
 
 
 def b64decode(d):
@@ -21,7 +22,10 @@ def b64encode(d):
         if typ == dict or typ == list:
             d['value'] = base64.b64encode(json.dumps(v).encode('utf-8')).decode('utf-8')
         elif typ == str:
-            d['value'] = base64.b64encode(v.encode('utf-8')).decode('utf-8')
+            if sys.version_info[0] < 3:
+                d['value'] = base64.b64encode(v).decode('utf-8')
+            else:
+                d['value'] = base64.b64encode(v.encode('utf-8')).decode('utf-8')
         elif typ == bytearray or typ == bytes:
             d['value'] = base64.b64encode(v).decode('utf-8')
         else:

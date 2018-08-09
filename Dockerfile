@@ -22,8 +22,7 @@ RUN export DEBIAN_FRONTEND=noninteractive && \
   chown -R root:root $HOME && \
   pip$tag install -U pip || true && \
   apt-get purge -y && \
-	rm -rf /root/.pip/cache/* /tmp/pip* && \
-  rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+	rm -rf /root/.pip/cache/* /tmp/pip*
 
 RUN pip$tag --version
 

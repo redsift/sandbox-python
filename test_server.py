@@ -6,9 +6,6 @@ import json
 
 import nanomsg
 
-import run
-
-
 def main():
     sift_root = '/tmp'
     node_indexes = sys.argv[1:]

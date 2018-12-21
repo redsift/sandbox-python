@@ -9,6 +9,7 @@ import threading
 import time
 import math
 import traceback
+import site
 
 from monotonic import monotonic
 
@@ -38,9 +39,10 @@ def listen_and_reply(sock, compute_func):
 def new_module(node_idx, src):
     # Prepend source file and local site-packages dirs to sys.path to allow
     # relative imports.
-    for d in  [os.path.dirname(src), os.path.join(os.path.dirname(src), 'site-packages')]:
-        if d not in sys.path:
-            sys.path.insert(0, d)
+    srcp = os.path.dirname(src)
+    spp = os.path.join(srcp, 'site-packages')
+    site.addsitedir(srcp)
+    site.addsitedir(spp)
 
     m = imp.load_source('node%d' % node_idx, src)
     if not hasattr(m, 'compute'):

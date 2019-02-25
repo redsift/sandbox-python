@@ -18,23 +18,27 @@ from nanomsg import Socket, REP
 import protocol
 import init
 
-def listen_and_reply(sock, compute_func):
+def listen_and_reply(sock, m, err):
     while True:
         req = protocol.from_encoded_message(sock.recv())
         start = monotonic()
-        try:
-            ret = compute_func(req)
-            end = monotonic()
-            t = end - start
-            diff = []
-            diff.append(math.floor(t))
-            diff.append((t - diff[0]) * math.pow(10, 9))
-            sock.send(protocol.to_encoded_message(ret, diff))
-        except:
-            exc = traceback.format_exc()
-            print(exc)
-            err = dict(message=sys.exc_info()[0].__name__, stack=exc)
+
+        if m is None:
             sock.send(json.dumps(dict(error=err)))
+        else:
+            try:
+                ret = m.compute(req)
+                end = monotonic()
+                t = end - start
+                diff = []
+                diff.append(math.floor(t))
+                diff.append((t - diff[0]) * math.pow(10, 9))
+                sock.send(protocol.to_encoded_message(ret, diff))
+            except:
+                exc = traceback.format_exc()
+                print(exc)
+                err = dict(message=sys.exc_info()[0].__name__, stack=exc)
+                sock.send(json.dumps(dict(error=err)))
 
 def new_module(node_idx, src):
     # Prepend source file and local site-packages dirs to sys.path to allow
@@ -61,7 +65,7 @@ def main():
     threads = {}
     sockets = []
     node_indexes = sys.argv[1:]
-    if len(node_indexes) == 0:
+    if not node_indexes:
         print('no nodes to execute')
         return 1
 
@@ -71,8 +75,7 @@ def main():
 
     for i in map(int, node_indexes):
         src = os.path.join(sift_root, dag['dag']['nodes'][i]['implementation']['python'])
-        print('loading ' + src)
-        m = new_module(i, src)
+        # print('loading ' + src)
 
         # Create nanomsg socket.
         addr = 'ipc://%s/%d.sock'% (ipc_root, i)
@@ -82,8 +85,18 @@ def main():
         print('connected to '+ addr)
         sockets.append(s)
 
+        m = None
+        err = None
+        try:
+            m = new_module(i, src)
+        except:
+            m = None
+            exc = traceback.format_exc()
+            print(exc)
+            err = dict(message=sys.exc_info()[0].__name__, stack=exc)
+
         # Launch request handler.
-        t = threading.Thread(target=listen_and_reply, args=(s, m.compute))
+        t = threading.Thread(target=listen_and_reply, args=(s, m, err))
         t.daemon = True
         t.start()
         threads[i] = t

@@ -15,7 +15,6 @@ ENV version=${v} tag=${t}
 ENV PYTHONPATH=$PYTHONPATH:$HOME/lib/python PATH=$PATH:$HOME/lib/python
 
 RUN export DEBIAN_FRONTEND=noninteractive && \
-  echo "tag=${tag}" && \
   apt-get update && \
 	apt-get install -y \
 	build-essential git \

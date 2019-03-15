@@ -37,7 +37,13 @@ jobs:
     executor: dockexec
     steps:
       - v_build:
-          nv: "2.7.16"
+          nv: "2.7.14"
+  
+  build_27:
+    executor: dockexec
+    steps:
+      - v_build:
+          nv: "2.7"
 
   build_v3-6:
     executor: dockexec
@@ -64,6 +70,7 @@ workflows:
   build-and-deploy:
     jobs:
       - build_default
+      - build_27
       - trigger-builds:
           requires:
             - build_default

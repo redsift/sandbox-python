@@ -1,4 +1,0 @@
-FROM python3
-MAINTAINER Deepak Prabhakara email: deepak@redsift.io version: 1.1.101
-
-ENTRYPOINT ["/usr/bin/python3"]

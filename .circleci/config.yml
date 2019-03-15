@@ -1,0 +1,75 @@
+version: 2.1
+
+default:
+  environment: &envvars
+    CONTAINER_NAME: quay.io/redsift/sandbox-python
+    CIRCLE_REVERSE_DEPENDENCIES: sandbox-scipy sandbox-nltk
+executors:
+  dockexec:
+    shell: /bin/bash
+    environment: *envvars
+    docker:
+      - image: cibuilds/docker:18.06.3-ce
+
+commands:
+  v_build:
+    parameters:
+      nv:
+        type: string
+      islatest:
+        type: boolean
+        default: false
+    steps:
+      - checkout
+      - run: ./install.sh
+      - setup_remote_docker
+      - run: docker login -u $QUAY_USER -p $QUAY_PASS quay.io
+      - run: ./circle/docker_build << parameters.nv >> << parameters.islatest >>
+      - run: ./circle/gen_testing_dockerfile << parameters.nv >>
+      - run: ./circle/docker_test << parameters.nv >>
+      - persist_to_workspace:
+          root: ./
+          paths:
+            - circle
+
+jobs:
+  build_default:
+    executor: dockexec
+    steps:
+      - v_build:
+          nv: "2.7.16"
+
+  build_v3-6:
+    executor: dockexec
+    steps:
+      - v_build:
+          nv: "3.6.8"
+
+  build_v3-7:
+    executor: dockexec
+    steps:
+      - v_build:
+          nv: "3.7.2"
+          islatest: true
+
+  trigger-builds:
+    executor: dockexec
+    steps:
+      - attach_workspace:
+          at: /
+      - run: /circle/trigger_build
+
+workflows:
+  version: 2.1
+  build-and-deploy:
+    jobs:
+      - build_default
+      - build_v3-6
+      - build_v3-7
+      - trigger-builds:
+          requires:
+            - build_default
+          filters:
+            branches:
+              only:
+                - master

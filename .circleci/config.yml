@@ -64,8 +64,8 @@ workflows:
   build-and-deploy:
     jobs:
       - build_default
-      - build_3-6
-      - build_3-7
+      - build_v3-6
+      - build_v3-7
       - trigger-builds:
           requires:
             - build_default

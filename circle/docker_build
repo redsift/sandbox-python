@@ -10,10 +10,11 @@ SUFFIX="-beta"
 if [ $tagName == "release" ]; then
   SUFFIX=""
 fi
-imageName=$CONTAINER_NAME:v$NV$SUFFIX
 
-varg=$(echo $NV | sed "s/\([0-9]\).\([0-9]\).*/\1.\2/")
-echo "Setting build-arg v=${varg}"
+minorv=$(echo $NV | sed "s/\([0-9]\).\([0-9]\).*/\1.\2/")
+echo "Setting build-arg v=${minorv}"
+
+imageName=$CONTAINER_NAME:v$minorv$SUFFIX # tagging up to minor version while building
 
 ptag=${NV/#2*/} # for v2: ptag=""
 if [ -n $ptag ]; then
@@ -23,10 +24,14 @@ echo "Configuring entrypoint in Dockerfile with t=${ptag}"
 sed "s/ENTRYPOINT \[\"\/usr\/bin\/python/&${ptag}/" < Dockerfile > Dockerfile.versioned
 
 echo Building $imageName
-docker build --build-arg v=$varg --build-arg t="${ptag}" -t $imageName -f Dockerfile.versioned .
+docker build --build-arg v=$minorv --build-arg t="${ptag}" -t $imageName -f Dockerfile.versioned .
 
 PV=$(docker run -u 7438:7438 -t $imageName --version | tr -d '\r' | tr -d '+')
 echo "Container report version: ${PV}"
+
+FV_TAG=$CONTAINER_NAME:v$PV$SUFFIX
+echo "Tagging as $FV_TAG"
+docker tag $imageName $FV_TAG
 
 MAJOR_VERSION=(${NV//./ })
 MV_TAG=$CONTAINER_NAME:v$MAJOR_VERSION$SUFFIX

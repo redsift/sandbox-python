@@ -8,7 +8,9 @@ SUFFIX="-beta"
 if [ $tagName == "release" ]; then
   SUFFIX=""
 fi
-imageName=$CONTAINER_NAME:v$NV$SUFFIX
+
+minorv=$(echo $NV | sed "s/\([0-9]\).\([0-9]\).*/\1.\2/")
+imageName=$CONTAINER_NAME:v$minorv$SUFFIX
 
 cat << EOF > ./Dockerfile.testing
 FROM ${imageName}

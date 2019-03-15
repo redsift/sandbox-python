@@ -27,9 +27,10 @@ echo Building $imageName
 docker build --build-arg v=$minorv --build-arg t="${ptag}" -t $imageName -f Dockerfile.versioned .
 
 PV=$(docker run -u 7438:7438 -t $imageName --version | tr -d '\r' | tr -d '+')
-echo "Container report version: ${PV}"
+V=${PV/Python /}
+echo "Container report version: ${V}"
 
-FV_TAG=$CONTAINER_NAME:v$PV$SUFFIX
+FV_TAG=$CONTAINER_NAME:v$V$SUFFIX
 echo "Tagging as $FV_TAG"
 docker tag $imageName $FV_TAG
 

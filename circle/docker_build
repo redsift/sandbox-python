@@ -18,7 +18,7 @@ ptag=${NV/#2*/} # for v2: ptag=""
 if [ -n $ptag ]; then
   ptag=${ptag:+3} # for v3 ptag=3
 fi
-echo Configuring entrypoint
+echo "Configuring entrypoint with t=${ptag}"
 sed "s/ENTRYPOINT \[\"\/usr\/bin\/python/&${ptag}/" < Dockerfile > Dockerfile.versioned
 
 echo Building $imageName

@@ -41,18 +41,12 @@ jobs:
       - v_build:
           nv: "2.7"
 
-  build_v3-6:
+  build_v3:
     executor: dockexec
     steps:
       - v_build:
           nv: "3.6"
 
-  build_v3-7:
-    executor: dockexec
-    steps:
-      - v_build:
-          nv: "3.7"
-          islatest: true
 
   trigger-builds:
     executor: dockexec
@@ -66,8 +60,7 @@ workflows:
   build-and-deploy:
     jobs:
       - build_default
-      - build_v3-6
-      - build_v3-7
+      - build_v3
       - trigger-builds:
           requires:
             - build_default

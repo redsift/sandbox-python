@@ -11,7 +11,7 @@ if [ $tagName == "release" ]; then
   SUFFIX=""
 fi
 
-minorv=$(echo $NV | sed "s/\([0-9]\).\([0-9]\).*/\1.\2/")
+minorv=$(echo $NV | sed "s/\(.*\)\.\(.*\)\..*/\1.\2/")
 echo "Setting build-arg v=${minorv}"
 
 imageName=$CONTAINER_NAME:v$minorv$SUFFIX # tagging up to minor version while building

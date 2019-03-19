@@ -9,25 +9,25 @@ def test_decode():
     d = p.from_encoded_message(b'{"in":{"data":[{"value": "YWJj"}]}}')
     assert d == {'in': {'data': [{'value': b'abc'}]}}
 
-def test_decode_lookup():
-    d = p.from_encoded_message(b'{"in":{"data":[{"value": "YWJj"}]}, "lookup": [{"data":[{"value": "YWJj"}]}]}')
-    assert d == {'in': {'data': [{'value': b'abc'}]}, 'lookup': [{'data': [{'value': b'abc'}]}]}
+def test_decode_get():
+    d = p.from_encoded_message(b'{"in":{"data":[{"value": "YWJj"}]}, "get": [{"data":[{"value": "YWJj"}]}]}')
+    assert d == {'in': {'data': [{'value': b'abc'}]}, 'get': [{'data': [{'value': b'abc'}]}]}
 
-def test_decode_lookup1():
-    d = p.from_encoded_message(b'{"in":{"data":[{"value": "YWJj"}]}, "lookup": [{"data":[]}]}')
-    assert d == {'in': {'data': [{'value': b'abc'}]}, 'lookup': [{'data': []}]}
+def test_decode_get1():
+    d = p.from_encoded_message(b'{"in":{"data":[{"value": "YWJj"}]}, "get": [{"data":[]}]}')
+    assert d == {'in': {'data': [{'value': b'abc'}]}, 'get': [{'data': []}]}
 
-def test_decode_lookup2():
-    d = p.from_encoded_message(b'{"in":{"data":[{"value": "YWJj"}]}, "lookup": [{"data":[{"value": null}]}]}')
-    assert d == {'in': {'data': [{'value': b'abc'}]}, 'lookup': [{'data': [{'value': None }]}]}
+def test_decode_get2():
+    d = p.from_encoded_message(b'{"in":{"data":[{"value": "YWJj"}]}, "get": [{"data":[{"value": null}]}]}')
+    assert d == {'in': {'data': [{'value': b'abc'}]}, 'get': [{'data': [{'value': None }]}]}
 
-def test_decode_lookup3():
-    d = p.from_encoded_message(b'{"in":{"data":[{"value": "YWJj"}]}, "lookup": [{"data":null}]}')
-    assert d == {'in': {'data': [{'value': b'abc'}]}, 'lookup': [{'data': None}]}
+def test_decode_get3():
+    d = p.from_encoded_message(b'{"in":{"data":[{"value": "YWJj"}]}, "get": [{"data":null}]}')
+    assert d == {'in': {'data': [{'value': b'abc'}]}, 'get': [{'data': None}]}
 
 test_encode()
 test_decode()
-test_decode_lookup()
-test_decode_lookup1()
-test_decode_lookup2()
-test_decode_lookup3()
+test_decode_get()
+test_decode_get1()
+test_decode_get2()
+test_decode_get3()

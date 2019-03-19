@@ -54,9 +54,6 @@ def from_encoded_message(data):
         if k in d:
             b64decode(d[k])
 
-    for l in d.get('lookup', []):
-        b64decode(l)
-
     for g in d.get('get', []):
         b64decode(g)
 

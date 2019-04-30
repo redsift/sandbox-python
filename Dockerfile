@@ -6,7 +6,6 @@ ENV PYTHONUNBUFFERED=1 PYTHONIOENCODING=UTF-8
 LABEL io.redsift.sandbox.install="/usr/bin/redsift/install.py" io.redsift.sandbox.run="/usr/bin/redsift/run.py"
 
 COPY root /
-COPY vendor /vendor
 
 ARG v=2.7
 ARG t=

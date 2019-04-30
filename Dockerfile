@@ -26,9 +26,6 @@ RUN export DEBIAN_FRONTEND=noninteractive && \
 
 RUN pip$tag --version
 
-RUN mkdir -p $HOME/lib/python && \
-  cd /vendor/nanomsg-python && python$tag setup.py install --user --prefix=
-
 RUN pip$tag install --user -r /usr/bin/redsift/requirements.txt
 
 RUN chown -R sandbox:sandbox $HOME

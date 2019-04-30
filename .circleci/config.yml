@@ -21,7 +21,6 @@ commands:
         default: false
     steps:
       - checkout
-      - run: ./install.sh
       - setup_remote_docker
       - run: docker login -u $QUAY_USER -p $QUAY_PASS quay.io
       - run: ./circle/docker_build << parameters.nv >> << parameters.islatest >>

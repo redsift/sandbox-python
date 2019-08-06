@@ -17,6 +17,7 @@ RUN export DEBIAN_FRONTEND=noninteractive && \
   apt-get update && \
 	apt-get install -y \
 	build-essential git \
+	s3cmd \
   python$version-dev python$version python$tag-pip && \
   chown -R root:root $HOME && \
   pip$tag install -U pip || true && \

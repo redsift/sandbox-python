@@ -5,7 +5,7 @@ NV=$1
 IS_LATEST=${2:-}
 
 CIRCLE_BRANCH=${CIRCLE_BRANCH/\//-} # fix/sth => fix-sth
-tagName=("${CIRCLE_BRANCH/-/ }") # release-1 => release
+tagName=(${CIRCLE_BRANCH/-/ }) # release-1 => release
 SUFFIX="-beta"
 if [ $tagName == "release" ]; then
   SUFFIX=""
@@ -40,7 +40,7 @@ FV_TAG=$CONTAINER_NAME:v$V$SUFFIX
 echo "Tagging as $FV_TAG"
 docker tag $imageName $FV_TAG
 
-MAJOR_VERSION=("${NV//./ }")
+MAJOR_VERSION=(${NV//./ })
 MV_TAG=$CONTAINER_NAME:v$MAJOR_VERSION$SUFFIX
 echo "Tagging as $MV_TAG"
 docker tag $imageName $MV_TAG

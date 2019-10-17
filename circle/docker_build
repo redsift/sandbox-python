@@ -32,7 +32,7 @@ if [ "$NV" == "3.8" ]; then
 fi
 
 echo "Configuring FROM and ENTRYPOINT in Dockerfile with base=sandbox:${parentVersion} and t=python${ptag}"
-sed "s/^\(FROM quay.io\/redsift\/sandbox:\).*$/\1${parentVersion}/;s/ENTRYPOINT \[\"\/usr\/bin\/python/&${ptag}/" < baseDF > Dockerfile.versioned
+sed "s/^\(FROM quay.io\/redsift\/sandbox:\).*$/\1${parentVersion}/;s/ENTRYPOINT \[\"\/usr\/bin\/python/&${ptag}/" < $baseDF > Dockerfile.versioned
 
 echo Building $imageName
 docker build --build-arg v=$minorv --build-arg t="${ptag}" -t $imageName -f Dockerfile.versioned .

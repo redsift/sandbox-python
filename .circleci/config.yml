@@ -45,6 +45,12 @@ jobs:
     steps:
       - v_build:
           nv: "3.6"
+  
+  build_v3_8:
+    executor: dockexec
+    steps:
+      - v_build:
+          nv: "3.8"
 
 
   trigger-builds:
@@ -60,6 +66,7 @@ workflows:
     jobs:
       - build_default
       - build_v3
+      - build_v3_8
       - trigger-builds:
           requires:
             - build_default

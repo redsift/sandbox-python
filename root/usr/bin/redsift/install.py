@@ -4,23 +4,17 @@
    looking for a requirements.txt file in the dir of the implementation,
    when a requirements file is found, we are installing the listed
    libraries into a site-packages directory next to the source file.
-   This site-packages dir is perpended to the Python path by run.py
+   This site-packages dir is prepended to the Python path by run.py
    when loading the implementation.
 """
 from __future__ import print_function
 
+import init
 import json
 import os
 import os.path
+import sys, subprocess
 
-try:
-    from pip import main as pipmain
-except:
-    from pip._internal import main as pipmain
-
-import sys
-
-import init
 
 sr = init.env_var_or_exit('SIFT_ROOT')
 sj = init.env_var_or_exit('SIFT_JSON')
@@ -35,7 +29,7 @@ for n in sift['dag']['nodes']:
         requirements_file = os.path.join(sr, d, 'requirements.txt')
         if os.path.exists(requirements_file) and requirements_file not in cache:
             td = os.path.join(sr, d, 'site-packages')
-            ret = pipmain(['install', '--target='+td, '-r', requirements_file])
+            ret = subprocess.check_call([sys.executable, '-m', 'pip', 'install', '--target='+td, '-r', requirements_file])
             cache[requirements_file]=1
             if ret != 0:
                 print('pip install returned code: %s' % ret)

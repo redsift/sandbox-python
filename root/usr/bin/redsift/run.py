@@ -24,7 +24,7 @@ def listen_and_reply(sock, m, err):
         start = monotonic()
 
         if m is None:
-            sock.send(json.dumps(dict(error=err)))
+            sock.send(json.dumps(dict(error=err)).encode())
         else:
             try:
                 ret = m.compute(req)
@@ -33,12 +33,12 @@ def listen_and_reply(sock, m, err):
                 diff = []
                 diff.append(math.floor(t))
                 diff.append((t - diff[0]) * math.pow(10, 9))
-                sock.send(protocol.to_encoded_message(ret, diff))
+                sock.send(protocol.to_encoded_message(ret, diff).encode())
             except:
                 exc = traceback.format_exc()
                 print(exc)
                 err = dict(message=sys.exc_info()[0].__name__, stack=exc)
-                sock.send(json.dumps(dict(error=err)))
+                sock.send(json.dumps(dict(error=err)).encode())
 
 def new_module(node_idx, src):
     # Prepend source file and local site-packages dirs to sys.path to allow
@@ -81,7 +81,7 @@ def main():
         addr = 'ipc://%s/%d.sock'% (ipc_root, i)
         s = Socket(REP)
         s.recv_max_size = -1
-        s.connect(addr)
+        s.connect(addr.encode())
         print('connected to '+ addr)
         sockets.append(s)
 

@@ -1,6 +1,5 @@
 from __future__ import print_function
 
-import imp
 import json
 import os
 import os.path
@@ -10,13 +9,16 @@ import time
 import math
 import traceback
 import site
-
-from monotonic import monotonic
-
-from nanomsg import Socket, REP
-
 import protocol
 import init
+
+from monotonic import monotonic
+from nanomsg import Socket, REP
+
+try:
+    from importlib.machinery import SourceFileLoader as load_source
+except:
+    from imp import load_source
 
 def listen_and_reply(sock, m, err):
     while True:
@@ -48,7 +50,9 @@ def new_module(node_idx, src):
     site.addsitedir(srcp)
     site.addsitedir(spp)
 
-    m = imp.load_source('node%d' % node_idx, src)
+    m = load_source('node%d' % node_idx, src)
+    if sys.version_info[0] == 3:
+        m = m.load_module()
     if not hasattr(m, 'compute'):
         print('"%s" does not implement compute function' % src)
         sys.exit(1)

@@ -105,7 +105,7 @@ def main():
         while True:
             time.sleep(1)
             for i, thr in threads.items():
-                if not thr.isAlive():
+                if not thr.is_alive():
                     raise Exception('thread of node with index %d is dead' % i)
     finally:
         print('closing sockets')

@@ -85,7 +85,7 @@ def main():
         addr = 'ipc://%s/%d.sock'% (ipc_root, i)
         s = Socket(REP)
         s.recv_max_size = -1
-        s.connect(addr.encode())
+        s.connect(addr)
         print('connected to '+ addr)
         sockets.append(s)
 

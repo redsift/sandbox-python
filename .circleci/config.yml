@@ -64,13 +64,20 @@ workflows:
   version: 2.1
   build-and-deploy:
     jobs:
-      - build_default
-      - build_v3
-      - build_v3_8
+      - build_default:
+          context: org-global
+      - build_v3:
+          context: org-global
+      - build_v3_8:
+          context: org-global
       - trigger-builds:
+          context: org-global
           requires:
             - build_default
+            - build_v3
+            - build_v3_8
           filters:
             branches:
               only:
                 - master
+                - release-1

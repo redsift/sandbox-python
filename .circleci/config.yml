@@ -53,7 +53,7 @@ jobs:
     executor: dockexec
     steps:
       - checkout
-      - run: /circle/trigger_build
+      - run: ./circle/trigger_build
 
 workflows:
   version: 2.1

@@ -103,7 +103,7 @@ def main():
         s = Socket(REP)
         s.recv_max_size = -1
         s.connect(addr)
-        print("connected to " + addr)
+        # print("connected to " + addr)
         sockets.append(s)
 
         m = None

@@ -3,7 +3,7 @@ version: 2.1
 default:
   environment: &envvars
     CONTAINER_NAME: quay.io/redsift/sandbox-python
-    CIRCLE_REVERSE_DEPENDENCIES: sandbox-python-oninbox-ml sandbox-scipy sandbox-nltk
+    CIRCLE_REVERSE_DEPENDENCIES: sandbox-python-oninbox-ml sandbox-scipy sandbox-nltk sandbox-bimi
 executors:
   dockexec:
     shell: /bin/bash

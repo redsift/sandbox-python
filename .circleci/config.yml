@@ -62,7 +62,7 @@ workflows:
           context: org-global
       - build_v3:
           context: org-global
-      - build_v3_8:
+      - build_v3_9:
           context: org-global
       - trigger-builds:
           context: org-global

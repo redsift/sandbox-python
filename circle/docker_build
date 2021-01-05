@@ -27,7 +27,7 @@ if [ -n "$ptag" ]; then
 fi
 
 baseDF="Dockerfile"
-if [ "$NV" == "3.8" ]; then
+if [ "$NV" == "3.9" ]; then
   baseDF="Dockerfile.p3"
 fi
 

@@ -24,11 +24,12 @@ RUN export DEBIAN_FRONTEND=noninteractive && \
   chown -R root:root $HOME && \
   pip$tag install -U pip || true && \
   python$version -m pip install -U pip && \
-  ln -fs /usr/bin/python3.8 /usr/bin/python3 && \
+  ln -fs /usr/bin/python3.9 /usr/bin/python3 && \
   apt-get purge -y && \
   rm -rf /root/.pip/cache/* /tmp/pip*
 
 RUN python$version -m pip --version
+RUN python$version -m pip install --user setuptools==51.1.1
 RUN python$version -m pip install --user -r /usr/bin/redsift/requirements.txt
 
 RUN chown -R sandbox:sandbox $HOME

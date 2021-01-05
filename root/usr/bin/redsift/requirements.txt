@@ -1,2 +1,3 @@
 monotonic==1.0
+setuptools==51.1.1
 git+https://github.com/redsift/nanomsg-python

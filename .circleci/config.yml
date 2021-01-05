@@ -42,11 +42,11 @@ jobs:
       - v_build:
           nv: "3.6"
 
-  build_v3_8:
+  build_v3_9:
     executor: dockexec
     steps:
       - v_build:
-          nv: "3.8"
+          nv: "3.9"
 
   trigger-builds:
     executor: dockexec
@@ -69,4 +69,4 @@ workflows:
           requires:
             - build_default
             - build_v3
-            - build_v3_8
+            - build_v3_9

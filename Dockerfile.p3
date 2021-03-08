@@ -11,7 +11,8 @@ ARG v=2.7
 ARG t=
 
 ENV version=${v} tag=${t}
-ENV PYTHONPATH=$PYTHONPATH:$HOME/lib/python PATH=$PATH:$HOME/lib/python
+ENV PATH=$PATH:$HOME/lib/python
+ENV PYTHONPATH=$HOME/lib/python:$PYTHONPATH 
 
 RUN export DEBIAN_FRONTEND=noninteractive && \
   apt-get update && \

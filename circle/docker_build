@@ -27,9 +27,6 @@ if [ -n "$ptag" ]; then
 fi
 
 baseDF="Dockerfile"
-if [ "$NV" == "3.9" ]; then
-  baseDF="Dockerfile.p3"
-fi
 
 echo "Configuring FROM and ENTRYPOINT in Dockerfile with base=sandbox:${parentVersion} and t=python${ptag}"
 sed "s/^\(FROM quay.io\/redsift\/sandbox:\).*$/\1${parentVersion}/;s/ENTRYPOINT \[\"\/usr\/bin\/python/&${ptag}/" < $baseDF > Dockerfile.versioned

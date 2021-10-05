@@ -1,5 +1,3 @@
-from __future__ import print_function
-
 import json
 import os
 import os.path
@@ -10,10 +8,10 @@ import math
 import traceback
 import re
 import site
+
 import protocol
 import init
 
-from monotonic import monotonic
 from nanomsg import Socket, REP
 
 try:
@@ -25,14 +23,14 @@ except:
 def listen_and_reply(sock, m, err):
     while True:
         req = protocol.from_encoded_message(sock.recv())
-        start = monotonic()
+        start = time.monotonic()
 
         if m is None:
-            sock.send(json.dumps(dict(error=err)).encode())
+            sock.send(json.dumps({"error": err}).encode())
         else:
             try:
                 ret = m.compute(req)
-                end = monotonic()
+                end = time.monotonic()
                 t = end - start
                 diff = []
                 diff.append(math.floor(t))
@@ -41,8 +39,11 @@ def listen_and_reply(sock, m, err):
             except:
                 exc = traceback.format_exc()
                 print(exc)
-                err = dict(message=sys.exc_info()[0].__name__, stack=exc)
-                sock.send(json.dumps(dict(error=err)).encode())
+                sock.send(
+                    json.dumps(
+                        {"error": {"message": sys.exc_info()[0].__name__, "stack": exc}}
+                    ).encode()
+                )
 
 
 def add_site_dir(srcp):
@@ -74,7 +75,8 @@ def new_module(node_idx, src):
 
 def load_dag(sift_root):
     sift_json = init.env_var_or_exit("SIFT_JSON")
-    return json.load(open(os.path.join(sift_root, sift_json)))
+    with open(os.path.join(sift_root, sift_json)) as f:
+        return json.load(f)
 
 
 def main():
@@ -88,15 +90,13 @@ def main():
         print("no nodes to execute")
         return 1
 
-    dry = os.environ.get("DRY", "false")
-    if dry == "true":
+    if os.environ.get("DRY", "false") == "true":
         return 0
 
     for i in map(int, node_indexes):
         src = os.path.join(
             sift_root, dag["dag"]["nodes"][i]["implementation"]["python"]
         )
-        # print("loading " + src)
 
         # Create nanomsg socket.
         addr = "ipc://%s/%d.sock" % (ipc_root, i)
@@ -114,7 +114,7 @@ def main():
             m = None
             exc = traceback.format_exc()
             print(exc)
-            err = dict(message=sys.exc_info()[0].__name__, stack=exc)
+            err = {"message": sys.exc_info()[0].__name__, "stack": exc}
 
         # Launch request handler.
         t = threading.Thread(target=listen_and_reply, args=(s, m, err))

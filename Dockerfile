@@ -1,5 +1,5 @@
 FROM quay.io/redsift/sandbox:latest
-MAINTAINER Deepak Prabhakara email: deepak@redsift.io version: 1.1.102
+MAINTAINER Christos Vontas email: christos@redsift.io version: 1.1.102
 
 ENV PYTHONUNBUFFERED=1 PYTHONIOENCODING=UTF-8
 
@@ -7,7 +7,7 @@ LABEL io.redsift.sandbox.install="/usr/bin/redsift/install.py" io.redsift.sandbo
 
 COPY root /
 
-ARG v=2.7
+ARG v=3.8
 ARG t=
 
 ENV version=${v} tag=${t}
@@ -15,18 +15,23 @@ ENV PYTHONPATH=$PYTHONPATH:$HOME/lib/python PATH=$PATH:$HOME/lib/python
 
 RUN export DEBIAN_FRONTEND=noninteractive && \
   apt-get update && \
-	apt-get install -y \
-	build-essential git \
-	s3cmd \
-  python$version-dev python$version python$tag-pip && \
+  apt-get install -y \
+  software-properties-common \
+  build-essential git \
+  s3cmd && \
+  add-apt-repository ppa:deadsnakes/ppa && apt-get update && \
+  apt-get install -y python$version python$version-dev python$version-distutils python$tag-pip && \
   chown -R root:root $HOME && \
   pip$tag install -U pip || true && \
+  python$version -m pip install -U pip && \
+  ln -fs /usr/bin/python3.9 /usr/bin/python3 && \
   apt-get purge -y && \
-	rm -rf /root/.pip/cache/* /tmp/pip*
+  rm -rf /root/.pip/cache/* /tmp/pip*
 
-RUN pip$tag --version
-
-RUN pip$tag install --user -r /usr/bin/redsift/requirements.txt
+RUN curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python$version -
+RUN python$version -m pip --version
+RUN python$version -m pip install --user setuptools==51.1.1
+RUN python$version -m pip install --user -r /usr/bin/redsift/requirements.txt
 
 RUN chown -R sandbox:sandbox $HOME
 

@@ -30,17 +30,11 @@ commands:
           command: docker push $CONTAINER_NAME
 
 jobs:
-  build_default:
+  build_v3_8:
     executor: dockexec
     steps:
       - v_build:
-          nv: "2.7"
-
-  build_v3:
-    executor: dockexec
-    steps:
-      - v_build:
-          nv: "3.6"
+          nv: "3.8"
 
   build_v3_9:
     executor: dockexec
@@ -58,15 +52,12 @@ workflows:
   version: 2.1
   build-and-deploy:
     jobs:
-      - build_default:
-          context: org-global
-      - build_v3:
+      - build_v3_8:
           context: org-global
       - build_v3_9:
           context: org-global
       - trigger-builds:
           context: org-global
           requires:
-            - build_default
-            - build_v3
+            - build_v3_8
             - build_v3_9

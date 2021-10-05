@@ -7,30 +7,53 @@
    This site-packages dir is prepended to the Python path by run.py
    when loading the implementation.
 """
-from __future__ import print_function
+import sys
+import json
+import os.path
+import subprocess
 
 import init
-import json
-import os
-import os.path
-import sys, subprocess
 
+sr = init.env_var_or_exit("SIFT_ROOT")
+sj = init.env_var_or_exit("SIFT_JSON")
+ir = init.env_var_or_exit("IPC_ROOT")
 
-sr = init.env_var_or_exit('SIFT_ROOT')
-sj = init.env_var_or_exit('SIFT_JSON')
-ir = init.env_var_or_exit('IPC_ROOT')
-
-cache = {}
+cache = set()
 
 sift = json.load(open(os.path.join(sr, sj)))
-for n in sift['dag']['nodes']:
-    if 'implementation' in n and 'python' in n['implementation']:
-        d = os.path.dirname(n['implementation']['python'])
-        requirements_file = os.path.join(sr, d, 'requirements.txt')
-        if os.path.exists(requirements_file) and requirements_file not in cache:
-            td = os.path.join(sr, d, 'site-packages')
-            ret = subprocess.check_call([sys.executable, '-m', 'pip', 'install', '--target='+td, '-r', requirements_file])
-            cache[requirements_file]=1
+for n in sift["dag"]["nodes"]:
+    if "implementation" in n and "python" in n["implementation"]:
+        d = os.path.dirname(n["implementation"]["python"])
+        poetry_file = os.path.join(sr, d, "pyproject.toml")
+        requirements_file = os.path.join(sr, d, "requirements.txt")
+        if os.path.exists(poetry_file) and poetry_file not in cache:
+            ret = subprocess.check_call(
+                [
+                    sys.executable,
+                    "-m",
+                    "poetry",
+                    "install",
+                ],
+                cwd=os.path.join(sr, d),
+            )
+            cache.add(poetry_file)
             if ret != 0:
-                print('pip install returned code: %s' % ret)
+                print(f"poerty install returned code: {ret}")
+                sys.exit(ret)
+        elif os.path.exists(requirements_file) and requirements_file not in cache:
+            td = os.path.join(sr, d, "site-packages")
+            ret = subprocess.check_call(
+                [
+                    sys.executable,
+                    "-m",
+                    "pip",
+                    "install",
+                    "--target=" + td,
+                    "-r",
+                    requirements_file,
+                ]
+            )
+            cache.add(requirements_file)
+            if ret != 0:
+                print(f"pip install returned code: {ret}")
                 sys.exit(ret)

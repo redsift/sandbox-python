@@ -11,7 +11,7 @@ ARG v=3.8
 ARG t=
 
 ENV version=${v} tag=${t}
-ENV PYTHONPATH=$PYTHONPATH:$HOME/lib/python PATH=$PATH:$HOME/lib/python:/home/sandbox/.poetry/bin/poetry
+ENV PYTHONPATH=$PYTHONPATH:$HOME/lib/python PATH=$PATH:$HOME/lib/python:/home/sandbox/.poetry/bin
 
 RUN export DEBIAN_FRONTEND=noninteractive && \
   apt-get update && \

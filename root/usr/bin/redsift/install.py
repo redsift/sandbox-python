@@ -29,8 +29,6 @@ for n in sift["dag"]["nodes"]:
         if os.path.exists(poetry_file) and poetry_file not in cache:
             ret = subprocess.check_call(
                 [
-                    sys.executable,
-                    "-m",
                     "poetry",
                     "install",
                 ],

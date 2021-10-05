@@ -11,7 +11,7 @@ ARG v=3.8
 ARG t=
 
 ENV version=${v} tag=${t}
-ENV PYTHONPATH=$PYTHONPATH:$HOME/lib/python PATH=$PATH:$HOME/lib/python
+ENV PYTHONPATH=$PYTHONPATH:$HOME/lib/python PATH=$PATH:$HOME/lib/python:/home/sandbox/.poetry/bin/poetry
 
 RUN export DEBIAN_FRONTEND=noninteractive && \
   apt-get update && \
@@ -24,11 +24,12 @@ RUN export DEBIAN_FRONTEND=noninteractive && \
   chown -R root:root $HOME && \
   pip$tag install -U pip || true && \
   python$version -m pip install -U pip && \
-  ln -fs /usr/bin/python3.9 /usr/bin/python3 && \
+  ln -fs /usr/bin/python$version /usr/bin/python3 && \
   apt-get purge -y && \
   rm -rf /root/.pip/cache/* /tmp/pip*
 
 RUN curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python$version -
+RUN /home/sandbox/.poetry/bin/poetry config virtualenvs.create false
 RUN python$version -m pip --version
 RUN python$version -m pip install --user setuptools==51.1.1
 RUN python$version -m pip install --user -r /usr/bin/redsift/requirements.txt

@@ -34,7 +34,6 @@ for n in sift["dag"]["nodes"]:
                     "-vvv",
                 ],
                 cwd=os.path.join(sr, d),
-                shell=True,
             )
             cache.add(poetry_file)
             if ret != 0:

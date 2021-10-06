@@ -11,29 +11,40 @@ ARG v=3.8
 ARG t=
 
 ENV version=${v} tag=${t}
-ENV PYTHONPATH=$PYTHONPATH:$HOME/lib/python PATH=$PATH:$HOME/lib/python:/home/sandbox/.poetry/bin
+ENV PYTHONPATH=$PYTHONPATH:$HOME/lib/python
+ENV PATH=$PATH:$HOME/lib/python
 
-RUN export DEBIAN_FRONTEND=noninteractive && \
-  apt-get update && \
-  apt-get install -y \
-  software-properties-common \
-  build-essential git \
-  s3cmd && \
-  add-apt-repository ppa:deadsnakes/ppa && apt-get update && \
-  apt-get install -y python$version python$version-dev python$version-distutils python$tag-pip && \
-  chown -R root:root $HOME && \
-  pip$tag install -U pip || true && \
-  python$version -m pip install -U pip && \
-  ln -fs /usr/bin/python$version /usr/bin/python3 && \
-  apt-get purge -y && \
-  rm -rf /root/.pip/cache/* /tmp/pip*
+ARG DEBIAN_FRONTEND=noninteractive
+RUN apt-get update
+RUN apt-get install -y software-properties-common \
+                       build-essential \
+                       git \
+                       s3cmd
+RUN add-apt-repository ppa:deadsnakes/ppa
+RUN apt-get update
+RUN apt-get install -y python$version \
+                       python$version-dev \
+                       python$version-distutils \
+                       python$version-venv \
+                       python$tag-pip
 
-RUN curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python$version -
-RUN /home/sandbox/.poetry/bin/poetry config virtualenvs.create false
+RUN chown -R root:root $HOME
+RUN pip$tag install -U pip || true
+RUN python$version -m pip install -U pip
+RUN ln -fs /usr/bin/python$version /usr/bin/python3
+RUN apt-get purge -y && rm -rf /root/.pip/cache/* /tmp/pip*
+
 RUN python$version -m pip --version
 RUN python$version -m pip install --user setuptools==51.1.1
-RUN python$version -m pip install --user -r /usr/bin/redsift/requirements.txt
+RUN curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python$version -
+
+# Setup virtual env for all the libraries
+ENV VIRTUAL_ENV="$HOME/venv"
+RUN python$version -m venv $VIRTUAL_ENV
+ENV PATH="$VIRTUAL_ENV/bin:$HOME/.poetry/bin:$PATH"
+
+RUN python -m pip install -r /usr/bin/redsift/requirements.txt
 
 RUN chown -R sandbox:sandbox $HOME
 
-ENTRYPOINT ["/usr/bin/python"]
+ENTRYPOINT ["python"]

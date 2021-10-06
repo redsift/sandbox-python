@@ -14,18 +14,17 @@ import subprocess
 
 import init
 
-sr = init.env_var_or_exit("SIFT_ROOT")
-sj = init.env_var_or_exit("SIFT_JSON")
-ir = init.env_var_or_exit("IPC_ROOT")
+sift_root = init.env_var_or_exit("SIFT_ROOT")
+sift_json = init.env_var_or_exit("SIFT_JSON")
+ipc_root = init.env_var_or_exit("IPC_ROOT")
 
 cache = set()
 
-sift = json.load(open(os.path.join(sr, sj)))
-for n in sift["dag"]["nodes"]:
-    if "implementation" in n and "python" in n["implementation"]:
-        d = os.path.dirname(n["implementation"]["python"])
-        poetry_file = os.path.join(sr, d, "pyproject.toml")
-        requirements_file = os.path.join(sr, d, "requirements.txt")
+sift = json.load(open(os.path.join(sift_root, sift_json)))
+for node in sift["dag"]["nodes"]:
+    if "implementation" in node and "python" in node["implementation"]:
+        d = os.path.dirname(node["implementation"]["python"])
+        poetry_file = os.path.join(sift_root, d, "pyproject.toml")
         if os.path.exists(poetry_file) and poetry_file not in cache:
             ret = subprocess.check_call(
                 [
@@ -33,21 +32,20 @@ for n in sift["dag"]["nodes"]:
                     "install",
                     "-vvv",
                 ],
-                cwd=os.path.join(sr, d),
+                cwd=os.path.join(sift_root, d),
             )
             cache.add(poetry_file)
             if ret != 0:
                 print(f"poerty install returned code: {ret}")
                 sys.exit(ret)
-        elif os.path.exists(requirements_file) and requirements_file not in cache:
-            td = os.path.join(sr, d, "site-packages")
+        requirements_file = os.path.join(sift_root, d, "requirements.txt")
+        if os.path.exists(requirements_file) and requirements_file not in cache:
             ret = subprocess.check_call(
                 [
                     sys.executable,
                     "-m",
                     "pip",
                     "install",
-                    "--target=" + td,
                     "-r",
                     requirements_file,
                 ]

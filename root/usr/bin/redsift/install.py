@@ -23,17 +23,18 @@ def install():
     venv_path = os.path.join(sift_root, "server", "venv")
 
     # Create venv
-    ret = subprocess.check_call(
-        [
-            sys.executable,
-            "-m",
-            "venv",
-            venv_path,
-        ]
-    )
-    if ret != 0:
-        print(f"virtual environment create returned code: {ret}")
-        sys.exit(ret)
+    if not os.path.exists(venv_path):
+        ret = subprocess.check_call(
+            [
+                sys.executable,
+                "-m",
+                "venv",
+                venv_path,
+            ]
+        )
+        if ret != 0:
+            print(f"virtual environment create returned code: {ret}")
+            sys.exit(ret)
 
     # Install sandbox-python dependencies into the new venv
     ret = subprocess.check_call(

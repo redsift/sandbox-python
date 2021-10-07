@@ -9,8 +9,9 @@ import traceback
 import re
 import site
 
-import protocol
 import init
+import install
+import protocol
 
 from nanomsg import Socket, REP
 
@@ -135,4 +136,5 @@ def main():
 
 
 if __name__ == "__main__":
+    install.install()
     main()

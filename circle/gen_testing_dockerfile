@@ -19,6 +19,5 @@ LABEL email="christos@redsift.io"
 LABEL version="1.0.1"
 
 COPY --chown=7438:7438 test /run/sandbox/sift
-RUN chown -R 7438:7438 /run/sandbox/sift
 EOF
 

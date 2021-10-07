@@ -37,15 +37,12 @@ RUN apt-get purge -y && rm -rf /root/.pip/cache/* /tmp/pip*
 
 RUN python$version -m pip --version
 RUN python$version -m pip install --user setuptools==51.1.1
+RUN python$version -m pip install -r /usr/bin/redsift/requirements.txt
 RUN curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python$version -
 
-# Setup virtual env for all the libraries
-ENV VIRTUAL_ENV="$HOME/venv"
-RUN python$version -m venv $VIRTUAL_ENV
-ENV PATH="$SIFT_ROOT/venv/bin:$VIRTUAL_ENV/bin:$HOME/.poetry/bin:$PATH"
-
-RUN python -m pip install -r /usr/bin/redsift/requirements.txt
+ENV VIRTUAL_ENV="$SIFT_ROOT/server/venv"
+ENV PATH="$SIFT_ROOT/server/venv/bin:$HOME/.poetry/bin:$PATH"
 
 RUN chown -R sandbox:sandbox $HOME
 
-ENTRYPOINT ["python"]
+ENTRYPOINT ["python3"]

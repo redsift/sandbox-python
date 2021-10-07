@@ -42,7 +42,7 @@ RUN curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-
 # Setup virtual env for all the libraries
 ENV VIRTUAL_ENV="$HOME/venv"
 RUN python$version -m venv $VIRTUAL_ENV
-ENV PATH="$VIRTUAL_ENV/bin:$HOME/.poetry/bin:$PATH"
+ENV PATH="$SIFT_ROOT/venv/bin:$VIRTUAL_ENV/bin:$HOME/.poetry/bin:$PATH"
 
 RUN python -m pip install -r /usr/bin/redsift/requirements.txt
 

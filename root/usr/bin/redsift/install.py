@@ -9,6 +9,7 @@
 """
 import sys
 import json
+import shutil
 import os.path
 import subprocess
 
@@ -30,7 +31,6 @@ def install():
                     [
                         "poetry",
                         "install",
-                        "-vvv",
                     ],
                     cwd=os.path.join(sift_root, d),
                 )
@@ -54,6 +54,10 @@ def install():
                 if ret != 0:
                     print(f"pip install returned code: {ret}")
                     sys.exit(ret)
+
+    # Persistence for run.py
+    if src := os.environ.get("VIRTUAL_ENV"):
+        shutil.copytree(src, os.path.join(sift_root, "venv"))
 
 
 if __name__ == "__main__":

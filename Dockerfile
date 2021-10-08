@@ -26,7 +26,6 @@ RUN apt-get update
 RUN apt-get install -y python$version \
                        python$version-dev \
                        python$version-distutils \
-                       python$version-venv \
                        python$tag-pip
 
 RUN chown -R root:root $HOME
@@ -40,9 +39,6 @@ RUN python$version -m pip install --user setuptools==51.1.1
 RUN python$version -m pip install -r /usr/bin/redsift/requirements.txt
 RUN curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python$version -
 
-ENV VIRTUAL_ENV="$SIFT_ROOT/server/venv"
-ENV PATH="$SIFT_ROOT/server/venv/bin:$HOME/.poetry/bin:$PATH"
-
 RUN chown -R sandbox:sandbox $HOME
 
-ENTRYPOINT ["python3"]
+ENTRYPOINT ["/usr/bin/python"]

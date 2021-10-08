@@ -10,6 +10,7 @@
 import os
 import sys
 import json
+import uuid
 import subprocess
 
 import init
@@ -19,78 +20,58 @@ def install():
     cache = set()
     sift_root = init.env_var_or_exit("SIFT_ROOT")
     sift_json = init.env_var_or_exit("SIFT_JSON")
-    old_path = os.environ["PATH"]
-    venv_path = os.path.join(sift_root, "server", "venv")
-
-    # Create venv
-    if not os.path.exists(venv_path):
-        ret = subprocess.check_call(
-            [
-                sys.executable,
-                "-m",
-                "venv",
-                venv_path,
-            ]
-        )
-        if ret != 0:
-            print(f"virtual environment create returned code: {ret}")
-            sys.exit(ret)
-
-    # Install sandbox-python dependencies into the new venv
-    ret = subprocess.check_call(
-        [
-            os.path.join(venv_path, "bin", "python"),
-            "-m",
-            "pip",
-            "install",
-            "-r",
-            "/usr/bin/redsift/requirements.txt",
-        ],
-        env={
-            "VIRTUAL_ENV": venv_path,
-            "PATH": f"{os.path.join(venv_path, 'bin')}:{old_path}",
-        },
-    )
-    if ret != 0:
-        print(f"pip install redsift requirements returned code: {ret}")
-        sys.exit(ret)
 
     sift = json.load(open(os.path.join(sift_root, sift_json)))
     for node in sift["dag"]["nodes"]:
         if "implementation" in node and "python" in node["implementation"]:
             d = os.path.dirname(node["implementation"]["python"])
             poetry_file = os.path.join(sift_root, d, "pyproject.toml")
+            td = os.path.join(sift_json, d, "site-packages")
             if os.path.exists(poetry_file) and poetry_file not in cache:
+                temp_file = f"/tmp/requirements_{uuid.uuid4()}.txt"
                 ret = subprocess.check_call(
                     [
-                        "poetry",
-                        "install",
+                        "/home/sandbox/.poetry/bin/poetry",
+                        "export",
+                        "-f",
+                        "requirements.txt",
+                        "--without-hashes",
+                        "-o",
+                        temp_file,
                     ],
                     cwd=os.path.join(sift_root, d),
-                    env={
-                        "VIRTUAL_ENV": venv_path,
-                        "PATH": f"{os.path.join(venv_path, 'bin')}:{old_path}",
-                    },
                 )
-                cache.add(poetry_file)
                 if ret != 0:
                     print(f"poerty install returned code: {ret}")
                     sys.exit(ret)
+                ret = subprocess.check_call(
+                    [
+                        sys.executable,
+                        "-m",
+                        "pip",
+                        "install",
+                        "--target=" + td,
+                        "-r",
+                        temp_file,
+                    ]
+                )
+                if ret != 0:
+                    print(f"pip install returned code: {ret}")
+                    sys.exit(ret)
+                os.unlink(temp_file)
+                cache.add(poetry_file)
             requirements_file = os.path.join(sift_root, d, "requirements.txt")
             if os.path.exists(requirements_file) and requirements_file not in cache:
                 ret = subprocess.check_call(
                     [
-                        os.path.join(venv_path, "bin", "python"),
+                        sys.executable,
                         "-m",
                         "pip",
                         "install",
+                        "--target=" + td,
                         "-r",
                         requirements_file,
                     ],
-                    env={
-                        "VIRTUAL_ENV": venv_path,
-                        "PATH": f"{os.path.join(venv_path, 'bin')}:{old_path}",
-                    },
                 )
                 cache.add(requirements_file)
                 if ret != 0:

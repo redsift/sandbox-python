@@ -26,7 +26,7 @@ def install():
         if "implementation" in node and "python" in node["implementation"]:
             d = os.path.dirname(node["implementation"]["python"])
             poetry_file = os.path.join(sift_root, d, "pyproject.toml")
-            td = os.path.join(sift_json, d, "site-packages")
+            td = os.path.join(sift_root, d, "site-packages")
             if os.path.exists(poetry_file) and poetry_file not in cache:
                 temp_file = f"/tmp/requirements_{uuid.uuid4()}.txt"
                 ret = subprocess.check_call(

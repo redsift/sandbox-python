@@ -28,6 +28,6 @@ RUN pip$tag --version
 
 RUN pip$tag install --user -r /usr/bin/redsift/requirements.txt
 
-RUN chown -R sandbox:sandbox $HOME
+RUN chown -R sandbox:sandbox /home/sandbox
 
 ENTRYPOINT ["/usr/bin/python"]

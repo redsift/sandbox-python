@@ -23,8 +23,6 @@ RUN export DEBIAN_FRONTEND=noninteractive && \
   apt-get install -y python$version python$version-dev python$version-distutils && \
   curl -sS https://bootstrap.pypa.io/get-pip.py | python$version && \
   chown -R root:root $HOME && \
-  pip$version install -U pip || true && \
-  python$version -m pip install -U pip && \
   ln -fs /usr/bin/python$version /usr/bin/python3 && \
   apt-get purge -y && \
   rm -rf /root/.pip/cache/* /tmp/pip*

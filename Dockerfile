@@ -29,7 +29,6 @@ RUN export DEBIAN_FRONTEND=noninteractive && \
   rm -rf /root/.pip/cache/* /tmp/pip*
 
 RUN python$version -m pip --version
-RUN python$version -m pip install --user setuptools==51.1.1
 RUN python$version -m pip install --user -r /usr/bin/redsift/requirements.txt
 
 RUN chown -R sandbox:sandbox $HOME

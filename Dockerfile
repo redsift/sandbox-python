@@ -20,7 +20,7 @@ RUN export DEBIAN_FRONTEND=noninteractive && \
   build-essential git \
   s3cmd && \
   add-apt-repository ppa:deadsnakes/ppa && apt-get update && \
-  apt-get install -y python$version python$version-dev python$version-distutils python$tag-pip
+  apt-get install -y python$version python$version-dev python$version-distutils python$tag-pip && \
   chown -R root:root $HOME && \
   pip$tag install -U pip || true && \
   python$version -m pip install -U pip && \

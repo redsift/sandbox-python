@@ -13,13 +13,16 @@ executors:
 
 commands:
   v_build:
+    parameters:
+        nv:
+          type: string
     steps:
       - checkout
       - setup_remote_docker
       - run: docker login -u $QUAY_USER -p $QUAY_PASS quay.io
-      - run: ./circle/docker_build
-      - run: ./circle/gen_testing_dockerfile
-      - run: ./circle/docker_test
+      - run: ./circle/docker_build << parameters.nv >>
+      - run: ./circle/gen_testing_dockerfile << parameters.nv >>
+      - run: ./circle/docker_test << parameters.nv >>
       - deploy:
           command: docker push $CONTAINER_NAME
 
@@ -27,7 +30,8 @@ jobs:
   build:
     executor: dockexec
     steps:
-      - v_build
+      - v_build:
+        nv: "3.9"
 
   trigger-builds:
     executor: dockexec

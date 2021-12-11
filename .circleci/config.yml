@@ -13,40 +13,21 @@ executors:
 
 commands:
   v_build:
-    parameters:
-      nv:
-        type: string
-      islatest:
-        type: boolean
-        default: false
     steps:
       - checkout
       - setup_remote_docker
       - run: docker login -u $QUAY_USER -p $QUAY_PASS quay.io
-      - run: ./circle/docker_build << parameters.nv >> << parameters.islatest >>
-      - run: ./circle/gen_testing_dockerfile << parameters.nv >>
-      - run: ./circle/docker_test << parameters.nv >>
+      - run: ./circle/docker_build
+      - run: ./circle/gen_testing_dockerfile
+      - run: ./circle/docker_test
       - deploy:
           command: docker push $CONTAINER_NAME
 
 jobs:
-  build_default:
+  build:
     executor: dockexec
     steps:
-      - v_build:
-          nv: "2.7"
-
-  build_v3:
-    executor: dockexec
-    steps:
-      - v_build:
-          nv: "3.6"
-
-  build_v3_9:
-    executor: dockexec
-    steps:
-      - v_build:
-          nv: "3.9"
+      - v_build
 
   trigger-builds:
     executor: dockexec
@@ -58,15 +39,9 @@ workflows:
   version: 2.1
   build-and-deploy:
     jobs:
-      - build_default:
-          context: org-global
-      - build_v3:
-          context: org-global
-      - build_v3_9:
+      - build:
           context: org-global
       - trigger-builds:
           context: org-global
           requires:
-            - build_default
-            - build_v3
-            - build_v3_9
+            - build

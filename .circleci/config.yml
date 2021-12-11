@@ -33,6 +33,12 @@ jobs:
       - v_build:
           nv: "3.9"
 
+    build_next:
+      executor: dockexec
+      steps:
+        - v_build:
+            nv: "3.10"
+
   trigger-builds:
     executor: dockexec
     steps:
@@ -45,7 +51,10 @@ workflows:
     jobs:
       - build:
           context: org-global
+      - build_next:
+          context: org-global
       - trigger-builds:
           context: org-global
           requires:
             - build
+            - build_next

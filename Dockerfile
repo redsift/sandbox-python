@@ -21,7 +21,7 @@ RUN export DEBIAN_FRONTEND=noninteractive && \
   s3cmd && \
   add-apt-repository ppa:deadsnakes/ppa && apt-get update && \
   apt-get install -y python$version python$version-dev python$version-distutils && \
-  curl -sS https://bootstrap.pypa.io/get-pip.py | python$version && \
+  curl -sS https://bootstrap.pypa.io/get-pip.py && \
   chown -R root:root $HOME && \
   ln -fs /usr/bin/python$version /usr/bin/python3 && \
   apt-get purge -y && \

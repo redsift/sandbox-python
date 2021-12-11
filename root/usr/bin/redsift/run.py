@@ -13,7 +13,7 @@ import site
 import protocol
 import init
 
-from monotonic import monotonic
+from time import monotonic
 from nanomsg import Socket, REP
 
 try:

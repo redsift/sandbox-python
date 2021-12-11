@@ -1,2 +1,1 @@
-monotonic==1.0
 git+https://github.com/redsift/nanomsg-python

@@ -7,7 +7,7 @@ LABEL io.redsift.sandbox.install="/usr/bin/redsift/install.py" io.redsift.sandbo
 
 COPY root /
 
-ARG v=2.7
+ARG v=3.10
 ARG t=
 
 ENV version=${v} tag=${t}

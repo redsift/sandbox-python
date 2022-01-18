@@ -7,7 +7,7 @@ LABEL io.redsift.sandbox.install="/usr/bin/redsift/install.py" io.redsift.sandbo
 
 COPY root /
 
-ARG v=3.9
+ARG v=3.10
 ARG t=
 
 ENV version=${v} tag=${t}
@@ -24,7 +24,7 @@ RUN export DEBIAN_FRONTEND=noninteractive && \
   chown -R root:root $HOME && \
   pip$tag install -U pip || true && \
   python$version -m pip install -U pip && \
-  ln -fs /usr/bin/python3.9 /usr/bin/python3 && \
+  ln -fs /usr/bin/python3.10 /usr/bin/python3 && \
   apt-get purge -y && \
   rm -rf /root/.pip/cache/* /tmp/pip*
 

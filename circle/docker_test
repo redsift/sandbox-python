@@ -1,7 +1,7 @@
 #!/bin/bash
 set -eu
 
-NV=$1
+NV=3.10.2
 imageName=$NV-testing
 # ubuntu version
 # sudo groupadd -g 7438 sandbox

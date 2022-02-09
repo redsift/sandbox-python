@@ -10,11 +10,13 @@ import math
 import traceback
 import re
 import site
-import protocol
-import init
-
 from time import monotonic
-from nanomsg import Socket, REP
+
+from pynng import Rep0
+
+import init
+import protocol
+
 
 try:
     from importlib.machinery import SourceFileLoader as load_source
@@ -99,10 +101,8 @@ def main():
         # print("loading " + src)
 
         # Create nanomsg socket.
-        addr = "ipc://%s/%d.sock" % (ipc_root, i)
-        s = Socket(REP)
-        s.recv_max_size = -1
-        s.connect(addr)
+        s = Rep0(dial=f"ipc://{ipc_root}/{i}.sock")
+        s.recv_max_size = 0
         # print("connected to " + addr)
         sockets.append(s)
 

@@ -4,7 +4,7 @@ import sys
 import time
 import json
 
-import nanomsg
+from pynng import Req0
 
 def main():
     sift_root = '/tmp'
@@ -15,10 +15,8 @@ def main():
 
     sockets = {}
     for i in map(int, node_indexes):
-        s = nanomsg.Socket(nanomsg.REQ)
-        addr = "ipc://%s/%d.sock" % (sift_root, i)
-        s.bind(addr)
-        print('bound to', addr)
+        s = Req0(listen=f"ipc://{ipc_root}/{i}.sock")
+        print(f"bound to ipc://{ipc_root}/{i}.sock")
         sockets[i] = s
 
     while True:

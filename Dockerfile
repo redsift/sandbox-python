@@ -22,7 +22,6 @@ RUN echo 'deb https://apt.kitware.com/ubuntu/ bionic main' /etc/apt/sources.list
 RUN apt-get update
 RUN apt-get install -y build-essential cmake git s3cmd python$version python$version-distutils python$version-dev
 RUN curl -Ss https://bootstrap.pypa.io/get-pip.py | python$version
-RUN curl -Ss https://bootstrap.pypa.io/get-pip.py | python$tag
 
 RUN chown -R root:root $HOME
 RUN ln -fs /usr/bin/python3.10 /usr/bin/python3 && \

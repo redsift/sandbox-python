@@ -17,8 +17,10 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update
 RUN apt-get install -y software-properties-common
 RUN add-apt-repository ppa:deadsnakes
+RUN curl https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | apt-key add -
+RUN echo 'deb https://apt.kitware.com/ubuntu/ bionic main' /etc/apt/sources.list.d/cmake.list
 RUN apt-get update
-RUN apt-get install -y build-essential curl git s3cmd python$version python$version-distutils python$version-dev
+RUN apt-get install -y build-essential cmake git s3cmd python$version python$version-distutils python$version-dev
 RUN curl -Ss https://bootstrap.pypa.io/get-pip.py | python$version
 RUN curl -Ss https://bootstrap.pypa.io/get-pip.py | python$tag
 

@@ -1,1 +1,1 @@
-git+https://github.com/redsift/nanomsg-python
+pynng

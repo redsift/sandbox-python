@@ -38,12 +38,12 @@ PV=$(docker run -u 7438:7438 -t $imageName --version | tr -d '\r' | tr -d '+')
 V=${PV/Python /}
 echo "Container report version: ${V}"
 
-FV_TAG=$CONTAINER_NAME:v$V$REVISION$SUFFIX
+FV_TAG=$CONTAINER_NAME:v$V$SUFFIX
 echo "Tagging as $FV_TAG"
 docker tag $imageName $FV_TAG
 
 MAJOR_VERSION=(${NV//./ })
-MV_TAG=$CONTAINER_NAME:v$MAJOR_VERSION$REVISION$SUFFIX
+MV_TAG=$CONTAINER_NAME:v$MAJOR_VERSION$SUFFIX
 echo "Tagging as $MV_TAG"
 docker tag $imageName $MV_TAG
 

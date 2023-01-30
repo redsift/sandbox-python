@@ -7,7 +7,7 @@ LABEL io.redsift.sandbox.install="/usr/bin/redsift/install.py" io.redsift.sandbo
 
 COPY root /
 
-ARG v=3.10
+ARG v=3.11
 ARG t=3
 
 ENV version=${v} tag=${t}
@@ -24,7 +24,7 @@ RUN apt-get install -y build-essential cmake git s3cmd python$version python$ver
 RUN curl -Ss https://bootstrap.pypa.io/get-pip.py | python$version
 
 RUN chown -R root:root $HOME
-RUN ln -fs /usr/bin/python3.10 /usr/bin/python3 && \
+RUN ln -fs /usr/bin/python3.11 /usr/bin/python3 && \
   apt-get purge -y && \
   rm -rf /root/.pip/cache/* /tmp/pip*
 

@@ -14,18 +14,19 @@ ENV version=${v} tag=${t}
 ENV PYTHONPATH=$PYTHONPATH:$HOME/lib/python PATH=$PATH:$HOME/lib/python
 ENV DEBIAN_FRONTEND=noninteractive
 
-RUN apt-get update
-RUN apt-get install -y software-properties-common
+RUN apt update
+RUN apt install -y software-properties-common
 RUN add-apt-repository ppa:deadsnakes
 RUN curl https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | apt-key add -
 RUN echo 'deb https://apt.kitware.com/ubuntu/ bionic main' > /etc/apt/sources.list.d/cmake.list
-RUN apt-get update
-RUN apt-get install -y build-essential cmake git s3cmd python$version python$version-distutils python$version-dev
-RUN curl -Ss https://bootstrap.pypa.io/get-pip.py | python$version
+RUN apt update
+RUN apt install -y build-essential cmake git s3cmd
+RUN apt install -y python$version python$version-dev python$version-venv python$version-distutils
+RUN python$version -m ensurepip --upgrade
 
 RUN chown -R root:root $HOME
 RUN ln -fs /usr/bin/python3.11 /usr/bin/python3 && \
-  apt-get purge -y && \
+  apt purge -y && \
   rm -rf /root/.pip/cache/* /tmp/pip*
 
 RUN python$version -m pip install --user -r /usr/bin/redsift/requirements.txt

@@ -1,4 +1,4 @@
-FROM quay.io/redsift/sandbox:latest
+FROM quay.io/redsift/sandbox:22.04-beta
 MAINTAINER Christos Vontas email: christos@redsift.io version: 1.1.102
 
 ENV PYTHONUNBUFFERED=1 PYTHONIOENCODING=UTF-8

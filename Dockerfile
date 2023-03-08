@@ -1,4 +1,4 @@
-FROM quay.io/redsift/sandbox:22.04-beta
+FROM quay.io/redsift/sandbox:20.04-beta
 MAINTAINER Christos Vontas email: christos@redsift.io version: 1.1.102
 
 ENV PYTHONUNBUFFERED=1 PYTHONIOENCODING=UTF-8
@@ -18,7 +18,7 @@ RUN apt update
 RUN apt install -y software-properties-common
 RUN add-apt-repository ppa:deadsnakes
 RUN curl https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | apt-key add -
-RUN echo 'deb https://apt.kitware.com/ubuntu/ jammy main' > /etc/apt/sources.list.d/cmake.list
+RUN echo 'deb https://apt.kitware.com/ubuntu/ focal main' > /etc/apt/sources.list.d/cmake.list
 RUN apt update
 RUN apt install -y build-essential cmake git s3cmd
 RUN apt install -y python$version python$version-dev python$version-venv python$version-distutils

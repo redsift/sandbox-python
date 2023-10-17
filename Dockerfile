@@ -11,8 +11,8 @@ ARG v
 ARG t
 
 # Fail if args are missing
-RUN test v
-RUN test t
+RUN test ${v}
+RUN test ${t}
 
 ENV version=${v} tag=${t}
 ENV PYTHONPATH=$PYTHONPATH:$HOME/lib/python PATH=$PATH:$HOME/lib/python

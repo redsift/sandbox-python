@@ -29,7 +29,7 @@ RUN apt install -y python$version python$version-dev python$version-venv python$
 RUN python$version -m ensurepip --upgrade
 
 RUN chown -R root:root $HOME
-RUN ln -fs /usr/bin/python3.${v} /usr/bin/python3 && \
+RUN ln -fs /usr/bin/python${v} /usr/bin/python3 && \
   apt purge -y && \
   rm -rf /root/.pip/cache/* /tmp/pip*
 

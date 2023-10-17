@@ -7,8 +7,12 @@ LABEL io.redsift.sandbox.install="/usr/bin/redsift/install.py" io.redsift.sandbo
 
 COPY root /
 
-RUN test ${v}  # Fail if not exists
-ARG test ${t}  # Fail if not exists
+ARG v
+ARG t
+
+# Fail if args are missing
+RUN test v
+RUN test t
 
 ENV version=${v} tag=${t}
 ENV PYTHONPATH=$PYTHONPATH:$HOME/lib/python PATH=$PATH:$HOME/lib/python

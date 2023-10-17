@@ -7,8 +7,12 @@ LABEL io.redsift.sandbox.install="/usr/bin/redsift/install.py" io.redsift.sandbo
 
 COPY root /
 
-ARG v=3.11
-ARG t=3
+ARG v
+ARG t
+
+# Fail if args are missing
+RUN test ${v}
+RUN test ${t}
 
 ENV version=${v} tag=${t}
 ENV PYTHONPATH=$PYTHONPATH:$HOME/lib/python PATH=$PATH:$HOME/lib/python
@@ -25,7 +29,7 @@ RUN apt install -y python$version python$version-dev python$version-venv python$
 RUN python$version -m ensurepip --upgrade
 
 RUN chown -R root:root $HOME
-RUN ln -fs /usr/bin/python3.11 /usr/bin/python3 && \
+RUN ln -fs /usr/bin/python${v} /usr/bin/python3 && \
   apt purge -y && \
   rm -rf /root/.pip/cache/* /tmp/pip*
 

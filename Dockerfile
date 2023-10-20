@@ -33,6 +33,8 @@ RUN ln -fs /usr/bin/python${v} /usr/bin/python3 && \
   apt purge -y && \
   rm -rf /root/.pip/cache/* /tmp/pip*
 
+# Update outdated installed packages and requirements
+RUN pip3 list -o 2>/dev/null | sed -n '3,${s/\s.*$//p}' | xargs -n 1 pip3 install -U  || true
 RUN python$version -m pip install --user -r /usr/bin/redsift/requirements.txt
 
 RUN chown -R sandbox:sandbox $HOME
